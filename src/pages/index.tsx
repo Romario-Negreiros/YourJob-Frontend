@@ -1,10 +1,17 @@
 import React from 'react'
+
 import { Routes, Route } from 'react-router-dom'
+import Layout from '../layouts'
+import Home from './Home'
+import NoMatch from './NoMatch'
 
 const Pages: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" />
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
     </Routes>
   )
 }
