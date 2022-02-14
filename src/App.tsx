@@ -1,13 +1,17 @@
 import React from 'react'
 
-import Layout from './layouts'
+import { ThemeProvider } from '@mui/material/styles'
+import { light } from './themes'
+import { BrowserRouter } from 'react-router-dom'
 import Pages from './pages'
 
 const App: React.FC = () => {
   return (
-    <Layout>
-      <Pages />
-    </Layout>
+    <BrowserRouter>
+      <ThemeProvider theme={light}>
+        <Pages />
+      </ThemeProvider>
+    </BrowserRouter>
   )
 }
 
