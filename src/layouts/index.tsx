@@ -1,9 +1,26 @@
 import React from 'react'
 
-const Layout: React.FC = ({ children }) => {
+import { makeStyles } from '@mui/styles'
+
+import Header from './Header'
+import { Outlet } from 'react-router-dom'
+
+import { Theme } from '@mui/material'
+
+const useStyles = makeStyles((theme: Theme) => {
+  return {
+    toolbar: theme.mixins.toolbar
+  }
+})
+
+const Layout: React.FC = () => {
+  const classes = useStyles()
+
   return (
     <>
-    {children}
+      <Header />
+      <div className={classes.toolbar}></div>
+      <Outlet />
     </>
   )
 }
