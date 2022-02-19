@@ -55,9 +55,11 @@ const Header: React.FC = () => {
           <IconButton size="large" edge="end">
             <AccountCircle />
           </IconButton>
-          <IconButton size="large" edge="end">
-            <LoginRoundedIcon />
-          </IconButton>
+          <Link to="/login" aria-label="Go to login page">
+            <IconButton size="large" edge="end">
+              <LoginRoundedIcon />
+            </IconButton>
+          </Link>
         </Box>
         <Menu
           id="mobile-menu"
@@ -74,7 +76,9 @@ const Header: React.FC = () => {
           </Link>
           <MenuItem onClick={handleClose}>For companies</MenuItem>
           <MenuItem onClick={handleClose}>Profile</MenuItem>
-          <MenuItem onClick={handleClose}>Logout</MenuItem>
+          <Link to="/login" aria-label="Go to login page" onClick={handleClose}>
+            <MenuItem>Login</MenuItem>
+          </Link>
         </Menu>
       </Toolbar>
     </AppBar>
