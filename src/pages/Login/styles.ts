@@ -5,14 +5,26 @@ import { Theme } from '@mui/material'
 const useStyles = makeStyles((theme: Theme) => {
   return {
     container: {
-      display: 'flex',
+      display: 'flex !important',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '100vw',
-      background: 'red',
-      [theme.breakpoints.up('md')]: {
-        height: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 1.5}px)`
-      }
+      width: '100%',
+      height: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 3}px)`
+    },
+    paper: {
+      height: '100%',
+      width: 400,
+      padding: 15
+    },
+    form: {
+      height: '100%',
+      display: 'flex',
+      flexFlow: 'row wrap',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    actions: {
+      alignSelf: 'flex-end'
     }
   }
 })
