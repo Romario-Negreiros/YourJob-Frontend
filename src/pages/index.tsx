@@ -5,8 +5,8 @@ import Layout from '../layouts'
 import Home from './Home'
 import NoMatch from './NoMatch'
 import Vagancies from './Vagancies'
-import Login from './Login'
-import Register from './Register'
+import { UserLogin } from './Login'
+import { UserRegister } from './Register'
 
 const Pages: React.FC = () => {
   return (
@@ -15,8 +15,8 @@ const Pages: React.FC = () => {
         <Route index element={<Home />} />
         <Route path="vagancies" element={<Vagancies />} />
         <Route path="*" element={<NoMatch />} />
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="login" element={<UserLogin />} />
+        <Route path="register" element={<UserRegister />} />
       </Route>
     </Routes>
   )
