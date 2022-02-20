@@ -73,14 +73,14 @@ const Register: React.FC = () => {
               ))}
             </Stepper>
           </Box>
-          <Box sx={{ width: '100%' }}>
+          <Box sx={{ textAlign: 'center', width: '100%' }}>
             {activeStep === steps.length
               ? (
               <>
                 <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
                   All steps completed - you&apos;re finished
                 </Typography>
-                <Button variant="contained" type="submit">
+                <Button variant="contained" color="success" type="submit">
                   Submit
                 </Button>
               </>
@@ -100,7 +100,7 @@ const Register: React.FC = () => {
             >
               Previous
             </Button>
-            <Button className={classes.button} variant="contained" onClick={handleReset}>
+            <Button className={classes.button} color="error" variant="contained" onClick={handleReset}>
               Reset
             </Button>
             <Button
