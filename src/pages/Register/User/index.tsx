@@ -1,6 +1,6 @@
 import React from 'react'
 
-import useStyles from './styles'
+import useStyles from '../../../styles/global'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -10,6 +10,8 @@ import StepLabel from '@mui/material/StepLabel'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
+import Link from '@mui/material/Link'
+import { Link as RouterLink } from 'react-router-dom'
 import { AuthForm, UserProfileForm } from '../../../components'
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
@@ -32,7 +34,7 @@ const steps: IStep[] = [
 ]
 
 const UserRegister: React.FC = () => {
-  const [activeStep, setActiveStep] = React.useState(1)
+  const [activeStep, setActiveStep] = React.useState(0)
 
   const handleNext = () => setActiveStep(activeStep + 1)
 
@@ -65,6 +67,13 @@ const UserRegister: React.FC = () => {
             >
               Create your new account
             </Typography>
+            <Box sx={{ textAlign: 'center' }}>
+              <RouterLink to="/login">
+                <Link underline="always" component="button" variant="h6">
+                  Login instead
+                </Link>
+              </RouterLink>
+            </Box>
             <Stepper sx={{ mt: 2 }} activeStep={activeStep}>
               {steps.map(step => (
                 <Step key={step.label}>
@@ -100,7 +109,12 @@ const UserRegister: React.FC = () => {
             >
               Previous
             </Button>
-            <Button className={classes.button} color="error" variant="contained" onClick={handleReset}>
+            <Button
+              className={classes.button}
+              color="error"
+              variant="contained"
+              onClick={handleReset}
+            >
               Reset
             </Button>
             <Button

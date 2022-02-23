@@ -9,33 +9,31 @@ import Link from '@mui/material/Link'
 import { Link as RouterLink } from 'react-router-dom'
 import Lottie from 'lottie-react'
 
-import WorkingGuy from '../../assets/animations/lottie-working-guy.json'
+import Building from '../../assets/animations/building.json'
 
-const Home: React.FC = () => {
+const Companies: React.FC = () => {
   const classes = useStyles()
 
   return (
     <Grid container columns={{ xs: 1, md: 2 }} columnSpacing={2}>
       <Grid item className={classes.grid} xs={1}>
         <Typography className={`${classes.typography} ${classes.customFont}`}>
-          Here you find your dream job!
+          Share and enhance your company!
         </Typography>
-        <RouterLink to="/register">
-          <Link underline="always" component="button" variant="h4">
-            Start now!
-          </Link>
-        </RouterLink>
+        <RouterLink to="/companies/register">
+            <Link underline="always" component="button" variant="h4">
+              Start now!
+            </Link>
+          </RouterLink>
       </Grid>
       <Grid item className={classes.grid} xs={1}>
-        <Box sx={{ maxWidth: '470px', maxHeight: '470px' }}>
-          <Lottie animationData={WorkingGuy} loop autoplay></Lottie>
-        </Box>
+        <Lottie animationData={Building} loop autoplay></Lottie>
       </Grid>
 
       <Grid item className={classes.grid} xs={1} sx={{ mt: 4 }}>
-        <Box className={classes.box}>
+      <Box className={classes.box}>
           <Typography variant="h2" className={`${classes.typography} ${classes.customFont}`}>
-            Start finding vagancies now!
+            Share available vagancies in your company!
           </Typography>
           <Typography
             variant="body1"
@@ -48,17 +46,13 @@ const Home: React.FC = () => {
             voluptas a earum et deleniti dolores pariatur! Dolores provident perferendis enim in
             maiores?
           </Typography>
-          <RouterLink className={classes.link} to="/vagancies">
-            <Link underline="always" component="button" variant="h6">
-              Vagancies
-            </Link>
-          </RouterLink>
         </Box>
       </Grid>
+
       <Grid item className={classes.grid} xs={1} sx={{ mt: 4 }}>
         <Box className={classes.box}>
           <Typography variant="h2" className={`${classes.typography} ${classes.customFont}`}>
-            Yourjob for companies
+            Find the best workers out there!
           </Typography>
           <Typography
             variant="body1"
@@ -72,15 +66,10 @@ const Home: React.FC = () => {
             soluta quidem mollitia quo voluptate neque tempore cumque commodi quod, dignissimos
             nulla. Assumenda, similique eos. Dolorem cumque corrupti quod! Nam, adipisci!
           </Typography>
-          <RouterLink className={classes.link} to="/companies">
-            <Link underline="always" component="button" variant="h6">
-              For companies
-            </Link>
-          </RouterLink>
         </Box>
       </Grid>
     </Grid>
   )
 }
 
-export default Home
+export default Companies

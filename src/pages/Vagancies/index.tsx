@@ -8,6 +8,12 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 import SearchIcon from '@mui/icons-material/Search'
 
+const breakpoints = {
+  xs: 12,
+  sm: 6,
+  md: 3
+}
+
 const Vagancies: React.FC = () => {
   return (
     <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -28,7 +34,7 @@ const Vagancies: React.FC = () => {
         />
       </Grid>
       {new Array(15).fill(1).map((v, i) => (
-        <Vagancy key={i + 'oi'} />
+        <Vagancy key={i + 'oi'} breakpoints={breakpoints}/>
       ))}
     </Grid>
   )
