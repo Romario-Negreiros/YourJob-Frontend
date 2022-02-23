@@ -11,12 +11,14 @@ import IconButton from '@mui/material/IconButton'
 
 import { Props } from './interfaces'
 
-import FavoriteIcon from '@mui/icons-material/Favorite'
+import BookmarkAdd from '@mui/icons-material/BookmarkAdd'
 import LinkIcon from '@mui/icons-material/Link'
 
-const Vagancy: React.FC<Props> = () => {
+const Vagancy: React.FC<Props> = ({ breakpoints }) => {
+  const { xs, sm, md, lg } = breakpoints
+
   return (
-    <Grid item xs={12} sm={6} md={4}>
+    <Grid item xs={xs} sm={sm} md={md} lg={lg}>
       <Card>
         <CardHeader
           avatar={<Avatar aria-label="vagancy">R</Avatar>}
@@ -31,7 +33,7 @@ const Vagancy: React.FC<Props> = () => {
         </CardContent>
         <CardActions>
           <IconButton size="medium" edge="end">
-            <FavoriteIcon />
+            <BookmarkAdd />
           </IconButton>
           <IconButton size="medium" edge="end">
             <LinkIcon />
