@@ -3,7 +3,6 @@ import React from 'react'
 import { makeStyles } from '@mui/styles'
 
 import Header from './Header'
-import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
 
 import { Theme } from '@mui/material'
@@ -24,8 +23,6 @@ const Layout: React.FC = () => {
       <div style={{ margin: 8 }}>
         <Outlet />
       </div>
-      <div className={classes.toolbar}></div>
-      <Footer />
     </>
   )
 }
