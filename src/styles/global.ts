@@ -83,6 +83,14 @@ const useStyles = makeStyles((theme: Theme) => {
       [theme.breakpoints.up('sm')]: {
         width: 'fit-content'
       }
+    },
+    infoCompPaper: {
+      display: 'flex',
+      flexFlow: 'row wrap',
+      gap: 10,
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 8
     }
   }
 })
