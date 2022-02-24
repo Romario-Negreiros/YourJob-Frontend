@@ -10,13 +10,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 
-const UserProfileInfo: React.FC = () => {
+const CompanyProfileInfo: React.FC = () => {
   const classes = useStyles()
 
   return (
     <Grid container spacing={4}>
       <Grid item xs={12}>
-        <Avatar sx={{ margin: 'auto' }}>H</Avatar>
+        <Avatar sx={{ margin: 'auto' }}>C</Avatar>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
@@ -25,7 +25,7 @@ const UserProfileInfo: React.FC = () => {
               Name
             </Typography>
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              user.name
+              company.name
             </Typography>
           </Box>
           <Button variant="contained">Change</Button>
@@ -48,10 +48,10 @@ const UserProfileInfo: React.FC = () => {
         <Paper elevation={8} className={classes.infoCompPaper}>
           <Box>
             <Typography variant="h6" component="div">
-              Bio
+              Description
             </Typography>
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              user.bio
+              company.description
             </Typography>
           </Box>
           <Button variant="contained">Change</Button>
@@ -61,15 +61,44 @@ const UserProfileInfo: React.FC = () => {
         <Paper elevation={8} className={classes.infoCompPaper}>
           <Box>
             <Typography variant="h6" component="div">
-              Curriculum
+              Phone number
+            </Typography>
+            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
+              +55 (47)987654321
+            </Typography>
+          </Box>
+          <Box>
+            <Button variant="contained">Change</Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Paper elevation={8} className={classes.infoCompPaper}>
+          <Box>
+            <Typography variant="h6" component="div">
+              Region
+            </Typography>
+            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
+              company.region
+            </Typography>
+          </Box>
+          <Box>
+            <Button variant="contained">Change</Button>
+          </Box>
+        </Paper>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Paper elevation={8} className={classes.infoCompPaper}>
+          <Box>
+            <Typography variant="h6" component="div">
+              Website
             </Typography>
             <Link href="#" variant="body1" underline="always" download sx={{ display: 'inline-block', mt: 2 }}>
-              Download
+                www.companyname.com
             </Link>
           </Box>
           <Box>
             <Button variant="contained">Change</Button>
-            <Button variant="contained" sx={{ ml: 2 }}>Preview</Button>
           </Box>
         </Paper>
       </Grid>
@@ -77,4 +106,4 @@ const UserProfileInfo: React.FC = () => {
   )
 }
 
-export default UserProfileInfo
+export default CompanyProfileInfo
