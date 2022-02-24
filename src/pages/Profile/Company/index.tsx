@@ -6,24 +6,31 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
-import { ProfileDrawer, CreatedVagancies, CompanyProfileInfo } from '../../../components'
+import { ProfileDrawer, CreatedVagancies, CompanyProfileInfo, CreateVagancyForm } from '../../../components'
 
-import BookmarksIcon from '@mui/icons-material/Bookmarks'
-import AccountBoxIcon from '@mui/icons-material/AccountBox'
+import BusinessIcon from '@mui/icons-material/Business'
+import PeopleIcon from '@mui/icons-material/People'
+import AddIcon from '@mui/icons-material/Add'
 
 import { Item } from '../interfaces'
 
 const initialListItems: Item[] = [
   {
     text: 'Profile Info',
-    icon: <AccountBoxIcon color="primary"/>,
+    icon: <BusinessIcon color="primary"/>,
     component: <CompanyProfileInfo key="proflieInfo" />,
     active: true
   },
   {
     text: 'Created Vagancies',
-    icon: <BookmarksIcon color="primary"/>,
+    icon: <PeopleIcon color="primary"/>,
     component: <CreatedVagancies key="createdVagancies" />,
+    active: false
+  },
+  {
+    text: 'Create Vagancy',
+    icon: <AddIcon color="primary"/>,
+    component: <CreateVagancyForm key="createVagancyForm" />,
     active: false
   }
 ]
@@ -72,7 +79,7 @@ const CompanyProfile: React.FC = () => {
         </Drawer>
       </Box>
 
-      <Grid container rowSpacing={4}>
+      <Grid container rowSpacing={4} sx={{ placeItems: 'center' }}>
         <Grid item xs={12} sx={{ textAlign: 'center', display: { xs: 'block', sm: 'none' } }}>
           <Button variant="contained" aria-label="Open options" onClick={handleDrawerToggle}>
             Open options

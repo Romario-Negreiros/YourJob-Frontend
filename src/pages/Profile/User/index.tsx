@@ -72,7 +72,7 @@ const UserProfile: React.FC = () => {
         </Drawer>
       </Box>
 
-      <Grid container rowSpacing={4}>
+      <Grid container rowSpacing={4} sx={{ placeItems: 'center' }}>
         <Grid item xs={12} sx={{ textAlign: 'center', display: { xs: 'block', sm: 'none' } }}>
           <Button variant="contained" aria-label="Open options" onClick={handleDrawerToggle}>
             Open options
