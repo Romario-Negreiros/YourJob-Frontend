@@ -6,31 +6,51 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
-import { ProfileDrawer, CreatedVagancies, CompanyProfileInfo, CreateVagancyForm } from '../../../components'
+import {
+  ProfileDrawer,
+  CreatedVagancies,
+  CompanyProfileInfo,
+  CreateVagancyForm,
+  Avaliations,
+  CreateAvaliationForm
+} from '../../../components'
 
 import BusinessIcon from '@mui/icons-material/Business'
 import PeopleIcon from '@mui/icons-material/People'
 import AddIcon from '@mui/icons-material/Add'
+import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 
 import { Item } from '../interfaces'
 
 const initialListItems: Item[] = [
   {
     text: 'Profile Info',
-    icon: <BusinessIcon color="primary"/>,
+    icon: <BusinessIcon color="primary" />,
     component: <CompanyProfileInfo key="proflieInfo" />,
     active: true
   },
   {
     text: 'Created Vagancies',
-    icon: <PeopleIcon color="primary"/>,
+    icon: <PeopleIcon color="primary" />,
     component: <CreatedVagancies key="createdVagancies" />,
     active: false
   },
   {
     text: 'Create Vagancy',
-    icon: <AddIcon color="primary"/>,
+    icon: <AddIcon color="primary" />,
     component: <CreateVagancyForm key="createVagancyForm" />,
+    active: false
+  },
+  {
+    text: 'Avaliations',
+    icon: <ThumbsUpDownIcon color="primary" />,
+    component: <Avaliations key="avaliations" />,
+    active: false
+  },
+  {
+    text: 'Avaliate',
+    icon: <AddIcon color="primary" />,
+    component: <CreateAvaliationForm key="createAvaliationForm" />,
     active: false
   }
 ]
@@ -43,6 +63,7 @@ const CompanyProfile: React.FC = () => {
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
   const handleActiveItem = (newActiveItemIndex: number, oldActiveItemIndex: number) => {
+    if (newActiveItemIndex === oldActiveItemIndex) return
     const listItemsCopy = [...listItems]
     listItemsCopy[newActiveItemIndex].active = true
     listItemsCopy[oldActiveItemIndex].active = false
@@ -64,7 +85,11 @@ const CompanyProfile: React.FC = () => {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }
           }}
         >
-          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem} handleDrawerToggle={handleDrawerToggle}/>
+          <ProfileDrawer
+            listItems={listItems}
+            handleActiveItem={handleActiveItem}
+            handleDrawerToggle={handleDrawerToggle}
+          />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -75,7 +100,7 @@ const CompanyProfile: React.FC = () => {
             '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box' }
           }}
         >
-          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem}/>
+          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem} />
         </Drawer>
       </Box>
 
