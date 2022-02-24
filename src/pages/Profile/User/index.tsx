@@ -11,19 +11,19 @@ import { ProfileDrawer, SavedVagancies, UserProfileInfo } from '../../../compone
 import BookmarksIcon from '@mui/icons-material/Bookmarks'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 
-import { Item } from './interfaces'
+import { Item } from '../interfaces'
 
 const initialListItems: Item[] = [
-  {
-    text: 'Saved Vagancies',
-    icon: <BookmarksIcon color="primary"/>,
-    component: <SavedVagancies key="savedVagancies" />,
-    active: true
-  },
   {
     text: 'Profile Info',
     icon: <AccountBoxIcon color="primary"/>,
     component: <UserProfileInfo key="proflieInfo" />,
+    active: true
+  },
+  {
+    text: 'Saved Vagancies',
+    icon: <BookmarksIcon color="primary"/>,
+    component: <SavedVagancies key="savedVagancies" />,
     active: false
   }
 ]
