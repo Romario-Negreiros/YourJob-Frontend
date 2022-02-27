@@ -6,9 +6,14 @@ import Home from './Home'
 import NoMatch from './NoMatch'
 import Vagancies from './Vagancies'
 import Login from './Login'
-import Companies from './Companies'
+import CompaniesHomePage from './CompaniesHomePage'
 import { UserRegister, CompanyRegister } from './Register'
 import { UserProfile, CompanyProfile } from './Profile'
+import ForgotPassword from './ForgotPassword'
+import ResetPassword from './ResetPassword'
+import VerifyEmail from './VerifyEmail'
+import Companies from './Companies'
+import Users from './Users'
 
 const Pages: React.FC = () => {
   return (
@@ -20,11 +25,16 @@ const Pages: React.FC = () => {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<UserRegister />} />
         <Route path="profile" element={<UserProfile />} />
+        <Route path="forgot_password" element={<ForgotPassword />} />
+        <Route path="reset_password" element={<ResetPassword />} />
+        <Route path="verify_email" element={<VerifyEmail />} />
+        <Route path="users" element={<Users />} />
         <Route path="companies">
-          <Route index element={<Companies />} />
+          <Route index element={<CompaniesHomePage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<CompanyRegister />} />
           <Route path="profile" element={<CompanyProfile />} />
+          <Route path="list" element={<Companies />} />
         </Route>
       </Route>
     </Routes>

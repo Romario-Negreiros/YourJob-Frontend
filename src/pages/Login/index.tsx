@@ -56,8 +56,14 @@ const Login: React.FC = () => {
               </Link>
             </RouterLink>
             <br />
+            <RouterLink to ="/forgot_password">
+              <Link underline="always" component="button" variant="h6">
+                Forgot Your Password?
+              </Link>
+            </RouterLink>
+            <br />
             <Button type="submit" variant="contained" sx={{ mt: 3, width: 250 }}>
-              Login
+              Log in
             </Button>
           </Box>
         </Box>

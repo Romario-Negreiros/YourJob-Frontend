@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Company } from '../../components'
+import { User } from '../../components'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
@@ -14,7 +14,7 @@ const breakpoints = {
   md: 3
 }
 
-const Companies: React.FC = () => {
+const Users: React.FC = () => {
   return (
     <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
       <Grid item sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
@@ -29,15 +29,15 @@ const Companies: React.FC = () => {
               </InputAdornment>
             )
           }}
-          label="Search Company"
+          label="Search Users"
           variant="outlined"
         />
       </Grid>
       {new Array(15).fill(1).map((v, i) => (
-        <Company key={i + 'oi'} breakpoints={breakpoints}/>
+        <User key={i + 'oi'} breakpoints={breakpoints}/>
       ))}
     </Grid>
   )
 }
 
-export default Companies
+export default Users
