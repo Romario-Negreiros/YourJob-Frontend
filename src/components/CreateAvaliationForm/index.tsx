@@ -32,7 +32,7 @@ const CreateAvaliationForm: React.FC = () => {
             <MenuItem value={4}>4</MenuItem>
             <MenuItem value={5}>5</MenuItem>
           </Select>
-        </FormControl>{' '}
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6} sx={{ textAlign: 'center' }}>
         <FormControl sx={{ width: 240 }}>
