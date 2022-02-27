@@ -8,15 +8,21 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 
 ### Progress
 
-- Styles
-- [x] Home page
-- [x] Login page
-- [ ] Register page
-- [x] Vagancies page
-- [ ] Companies page
-- [ ] User profile page
-- [ ] Company profile page
-- [ ] Vagancy details page
+#### Pages (styles)
+- [x] Home
+- [x] For companies home
+- [x] Login
+- [x] Register user
+= [x] Register company
+- [x] Vagancies list
+- [x] Companies list
+- [x] Users list
+- [x] User profile
+- [x] Company profile
+- [x] Vagancy details
+- [x] Forgot password
+- [x] Reset password
+- [x] Verify email
 
 ### How to contribute
 
