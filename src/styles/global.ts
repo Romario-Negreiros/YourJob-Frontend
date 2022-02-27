@@ -91,6 +91,18 @@ const useStyles = makeStyles((theme: Theme) => {
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: 8
+    },
+    box2: {
+      display: 'grid',
+      placeItems: 'center',
+      minHeight: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 3}px)`
+    },
+    paper2: {
+      padding: 10,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: 5
     }
   }
 })
