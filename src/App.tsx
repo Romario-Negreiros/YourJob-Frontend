@@ -5,14 +5,18 @@ import { light } from './themes'
 import { BrowserRouter } from 'react-router-dom'
 import { ScrollToTop } from './components'
 import Pages from './pages'
+import { Provider } from 'react-redux'
+import store from './app/store'
 
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <ThemeProvider theme={light}>
-        <ScrollToTop />
-        <Pages />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={light}>
+          <ScrollToTop />
+          <Pages />
+        </ThemeProvider>
+      </Provider>
     </BrowserRouter>
   )
 }
