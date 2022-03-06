@@ -1,6 +1,8 @@
 import React from 'react'
 
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import menuItems from './menuItems'
+
+import { Link } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -11,15 +13,8 @@ import MenuItem from '@mui/material/MenuItem'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
-import AccountIcon from '@mui/icons-material/AccountBox'
-import BusinessIcon from '@mui/icons-material/Business'
-import HomeIcon from '@mui/icons-material/Home'
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded'
-// import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
 
 const Header: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>()
   const isMenuOpen = Boolean(menuAnchorEl)
 
@@ -27,15 +22,6 @@ const Header: React.FC = () => {
     if (window.innerWidth <= 600) setMenuAnchorEl(event.currentTarget)
   }
   const handleCloseMenu = () => setMenuAnchorEl(null)
-
-  const handleRedirect = (path: string) => {
-    const { pathname } = location
-    if (pathname.includes('/companies')) {
-      navigate(`/companies/${path}`)
-    } else {
-      navigate(`/${path}`)
-    }
-  }
 
   return (
     <AppBar
@@ -58,29 +44,13 @@ const Header: React.FC = () => {
           </IconButton>
         </Box>
         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
-          <Link to="/" aria-label="Go to home page">
-            <IconButton size="large" edge="end">
-              <HomeIcon />
-            </IconButton>
-          </Link>
-          <Link to="/companies" aria-label="Go to companies page">
-            <IconButton size="large" edge="end">
-              <BusinessIcon />
-            </IconButton>
-          </Link>
-          <Link to="/profile" aria-label="Go to profile page" onClick={() => handleRedirect('profile')}>
-            <IconButton size="large" edge="end">
-              <AccountIcon />
-            </IconButton>
-          </Link>
-          <IconButton
-            size="large"
-            edge="end"
-            aria-label="Go to login page"
-            onClick={() => handleRedirect('login')}
-          >
-            <LoginRoundedIcon />
-          </IconButton>
+          {menuItems.map(item => (
+            <Link key={item.text} to={item.url} aria-label={item.ariaLabel}>
+              <IconButton size="large" edge="end">
+                {item.icon}
+              </IconButton>
+            </Link>
+          ))}
         </Box>
         <Menu
           id="mobile-menu"
@@ -92,31 +62,16 @@ const Header: React.FC = () => {
           }}
           sx={{ display: { xs: 'initial', ms: 'none' } }}
         >
-          <Link to="/" aria-label="Go to home page" onClick={handleCloseMenu}>
-            <MenuItem>Home</MenuItem>
-          </Link>
-          <Link to="/companies" aria-label="Go to companies page" onClick={handleCloseMenu}>
-            <MenuItem>For companies</MenuItem>
-          </Link>
-          <Link
-            to="/profile"
-            aria-label="Go to dashboard"
-            onClick={() => {
-              handleCloseMenu()
-              handleRedirect('profile')
-            }}
-          >
-            <MenuItem>Dashboard</MenuItem>
-          </Link>
-          <MenuItem
-            aria-label="Go to login page"
-            onClick={() => {
-              handleCloseMenu()
-              handleRedirect('login')
-            }}
-          >
-            Login
-          </MenuItem>
+          {menuItems.map(item => (
+            <Link
+              key={item.text}
+              to={item.url}
+              aria-label={item.ariaLabel}
+              onClick={handleCloseMenu}
+            >
+              <MenuItem>{item.text}</MenuItem>
+            </Link>
+          ))}
         </Menu>
       </Toolbar>
     </AppBar>

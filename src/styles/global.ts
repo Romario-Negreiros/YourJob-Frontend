@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) => {
       height: '100%',
       padding: 15
     },
-    form: {
+    formWrapper: {
       height: '100%',
       display: 'flex',
       flexFlow: 'row wrap'

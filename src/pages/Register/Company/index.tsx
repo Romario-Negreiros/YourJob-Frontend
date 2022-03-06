@@ -1,6 +1,8 @@
 import React from 'react'
 
 import useStyles from '../../../styles/global'
+import { useAppDispatch, useAppSelector } from '../../../app/hooks'
+import { updateData, resetData } from '../../../app/slices/companyRegisterForm'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -14,49 +16,53 @@ import Link from '@mui/material/Link'
 import { Link as RouterLink } from 'react-router-dom'
 import { AuthForm, CompanyProfileForm } from '../../../components'
 
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 
 interface IStep {
-  label: string
-  component: React.ReactElement
+  label: string;
+  renderComponent: (handleNext: () => void) => React.ReactElement
 }
 
 const steps: IStep[] = [
   {
     label: 'Authentication',
-    component: <AuthForm />
+    renderComponent: (handleNext) => {
+      return <AuthForm handleNext={handleNext} updateData={updateData}/>
+    }
   },
   {
     label: 'Profile',
-    component: <CompanyProfileForm />
+    renderComponent: (handleNext) => {
+      return <CompanyProfileForm handleNext={handleNext} />
+    }
   }
 ]
 
 const CompanyRegister: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState(0)
+  const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const formData = useAppSelector(state => state.companyRegisterForm.data)
 
   const handleNext = () => setActiveStep(activeStep + 1)
 
   const handleBack = () => setActiveStep(activeStep - 1)
 
-  const handleReset = () => setActiveStep(0)
+  const handleReset = () => {
+    dispatch(resetData())
 
-  const classes = useStyles()
+    setActiveStep(0)
+  }
 
-  const handleSubmit = (data: any) => {
-    return console.log(data)
+  const submitNewCompany = () => {
+    console.log(formData)
   }
 
   return (
     <Container className={classes.container}>
       <Paper className={classes.paper}>
         <Box
-          component="form"
-          className={classes.form}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit}
+          className={classes.formWrapper}
         >
           <Box sx={{ width: '100%' }}>
             <Typography
@@ -89,13 +95,13 @@ const CompanyRegister: React.FC = () => {
                 <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
                   All steps completed - you&apos;re finished
                 </Typography>
-                <Button variant="contained" color="success" type="submit">
+                <Button variant="contained" color="success" type="button" onClick={submitNewCompany}>
                   Submit
                 </Button>
               </>
                 )
               : (
-              <>{steps[activeStep].component}</>
+              <>{steps[activeStep].renderComponent(handleNext)}</>
                 )}
           </Box>
           <Box className={classes.buttonsWrapper}>
@@ -116,16 +122,6 @@ const CompanyRegister: React.FC = () => {
               onClick={handleReset}
             >
               Reset
-            </Button>
-            <Button
-              className={classes.button}
-              variant="contained"
-              disabled={activeStep === steps.length ? Boolean(1) : Boolean(0)}
-              endIcon={<KeyboardArrowRightIcon />}
-              type="button"
-              onClick={handleNext}
-            >
-              Next
             </Button>
           </Box>
         </Box>
