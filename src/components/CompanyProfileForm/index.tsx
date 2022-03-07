@@ -26,7 +26,6 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
     formState: { errors }
   } = useForm<Inputs>({
     defaultValues: {
-      address: initialState?.address,
       contactNumber: initialState?.contactNumber,
       country: initialState?.country,
       description: initialState?.description,
@@ -80,20 +79,6 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
           })}
           error={errors.country && true}
           helperText={errors.country?.message}
-        />
-      </Grid>
-      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
-        <TextField
-          label="Address"
-          sx={{ width: 240 }}
-          {...register('address', {
-            required: {
-              value: true,
-              message: 'Address is required!'
-            }
-          })}
-          error={errors.address && true}
-          helperText={errors.address?.message}
         />
       </Grid>
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
