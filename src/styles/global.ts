@@ -52,10 +52,7 @@ const useStyles = makeStyles((theme: Theme) => {
       justifyContent: 'center',
       alignItems: 'center',
       width: '100vw',
-      minHeight: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 1.5}px)`,
-      [theme.breakpoints.up('sm')]: {
-        height: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 1.5}px)`
-      }
+      minHeight: `calc(100vh - ${Number(theme.mixins.toolbar.minHeight) * 1.5}px)`
     },
     paper: {
       height: '100%',
