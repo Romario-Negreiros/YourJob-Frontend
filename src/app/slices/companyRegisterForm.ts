@@ -3,7 +3,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Inputs as AuthFormInputs } from '../../components/AuthForm/interfaces'
 import { Inputs as CompanyProfileFormInputs } from '../../components/CompanyProfileForm/interfaces'
 
-interface Inputs extends AuthFormInputs, CompanyProfileFormInputs {}
+export interface Inputs extends AuthFormInputs, Omit<CompanyProfileFormInputs, 'companyLogo'> {
+  companyLogo: string
+}
 
 type FormState = {
   data: Partial<Inputs> | null
@@ -19,13 +21,9 @@ const companyRegisterFormSlice = createSlice({
   reducers: {
     updateData: (state, action: PayloadAction<Partial<Inputs>>) => {
       const { payload } = action
-      if (payload.companyLogo) {
-        const companyLogo = payload.companyLogo as FileList
-        payload.companyLogo = JSON.stringify(companyLogo[0])
-      }
-      state.data = { ...state, ...payload }
+      state.data = { ...state.data, ...payload }
     },
-    resetData: (state) => {
+    resetData: state => {
       state.data = null
     }
   }
