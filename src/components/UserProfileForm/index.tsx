@@ -2,9 +2,10 @@ import React from 'react'
 
 import useStyles from './styles'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/userRegisterForm'
 import { styled } from '@mui/material/styles'
+import convertFileObj from '../../modules/convertFileObj'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -23,10 +24,19 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<Inputs>({ defaultValues: { ...initialState } })
+  } = useForm<Inputs>({ defaultValues: { bio: initialState?.bio } })
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
-    dispatch(updateData({ ...data }))
+  const onSubmit: SubmitHandler<Inputs> = ({ bio, profilePicture, curriculum }) => {
+    const stringifiedProfilePicture = convertFileObj(profilePicture[0])
+    const stringifiedCurriculum = convertFileObj(curriculum[0])
+
+    dispatch(
+      updateData({
+        bio,
+        profilePicture: stringifiedProfilePicture,
+        curriculum: stringifiedCurriculum
+      })
+    )
 
     handleNext()
   }
@@ -61,11 +71,11 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
         <label htmlFor="profile-picture">
           <Typography variant="body2">Profile picture</Typography>
           <Input
+            {...register('profilePicture')}
             type="file"
             accept="image/*"
             id="profile-picture"
             sx={{ display: 'none' }}
-            {...register('profilePicture')}
           />
           <Button variant="contained" color="secondary" component="span">
             Upload
@@ -76,11 +86,11 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
         <label htmlFor="curriculum">
           <Typography variant="body2">Curriculum</Typography>
           <Input
+            {...register('curriculum')}
             type="file"
             accept="file/*"
             id="curriculum"
             sx={{ display: 'none' }}
-            {...register('curriculum')}
           />
           <Button variant="contained" color="secondary" component="span">
             Upload

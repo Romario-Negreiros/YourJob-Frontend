@@ -2,9 +2,10 @@ import React from 'react'
 
 import useStyles from './styles'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/companyRegisterForm'
 import { styled } from '@mui/material/styles'
+import convertFileObj from '../../modules/convertFileObj'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -23,10 +24,19 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<Inputs>({ defaultValues: { ...initialState } })
+  } = useForm<Inputs>({
+    defaultValues: {
+      address: initialState?.address,
+      contactNumber: initialState?.contactNumber,
+      country: initialState?.country,
+      description: initialState?.description,
+      website: initialState?.website
+    }
+  })
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-    dispatch(updateData({ ...data }))
+    const stringifiedCompanyLogo = convertFileObj(data.companyLogo[0])
+    dispatch(updateData({ ...data, companyLogo: stringifiedCompanyLogo }))
 
     handleNext()
   }
@@ -42,6 +52,7 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
       onSubmit={handleSubmit(onSubmit)}
       className={classes.grid}
       rowSpacing={4}
+      sx={{ mt: 4 }}
     >
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
         <TextField
@@ -69,20 +80,6 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
           })}
           error={errors.country && true}
           helperText={errors.country?.message}
-        />
-      </Grid>
-      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
-        <TextField
-          label="Region"
-          sx={{ width: 240 }}
-          {...register('region', {
-            required: {
-              value: true,
-              message: 'Region is required!'
-            }
-          })}
-          error={errors.region && true}
-          helperText={errors.region?.message}
         />
       </Grid>
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
@@ -127,15 +124,15 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
           helperText={errors.website?.message}
         />
       </Grid>
-      <Grid item sx={{ textAlign: 'center' }} xs={12}>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
         <label htmlFor="company-logo">
           <Typography variant="body2">Logo</Typography>
           <Input
+            {...register('companyLogo')}
             type="file"
             accept="image/*"
             id="company-logo"
             sx={{ display: 'none' }}
-            {...register('companyLogo')}
           />
           <Button variant="contained" color="secondary" component="span">
             Upload

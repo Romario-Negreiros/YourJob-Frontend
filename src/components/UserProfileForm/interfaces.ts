@@ -1,7 +1,7 @@
 export interface Inputs {
   bio: string;
-  profilePicture: FileList | File| string;
-  curriculum: FileList | File | string;
+  profilePicture: FileList;
+  curriculum: FileList;
 }
 
 export interface Props {
