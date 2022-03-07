@@ -24,7 +24,13 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<Inputs>({ defaultValues: { bio: initialState?.bio } })
+  } = useForm<Inputs>({
+    defaultValues: {
+      bio: initialState?.bio,
+      age: initialState?.age,
+      workingArea: initialState?.workingArea
+    }
+  })
 
   const onSubmit: SubmitHandler<Inputs> = ({ bio, profilePicture, curriculum }) => {
     const stringifiedProfilePicture = convertFileObj(profilePicture[0])
@@ -53,7 +59,7 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
       className={classes.grid}
       rowSpacing={4}
     >
-      <Grid item sx={{ textAlign: 'center' }} xs={12}>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
         <TextField
           label="Bio"
           sx={{ width: 240 }}
@@ -65,6 +71,39 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
           })}
           error={errors.bio && true}
           helperText={errors.bio?.message}
+        />
+      </Grid>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
+        <TextField
+          label="Age"
+          sx={{ width: 240 }}
+          type="number"
+          {...register('age', {
+            required: {
+              value: true,
+              message: 'Age is required'
+            },
+            min: {
+              value: 18,
+              message: 'Minimum age is 18'
+            }
+          })}
+          error={errors.age && true}
+          helperText={errors.age?.message}
+        />
+      </Grid>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
+        <TextField
+          label="Working Area"
+          sx={{ width: 240 }}
+          {...register('workingArea', {
+            required: {
+              value: true,
+              message: 'Your working area is required'
+            }
+          })}
+          error={errors.workingArea && true}
+          helperText={errors.workingArea?.message}
         />
       </Grid>
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6}>
