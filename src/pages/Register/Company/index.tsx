@@ -2,7 +2,7 @@ import React from 'react'
 
 import useStyles from '../../../styles/global'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { updateData, resetData } from '../../../app/slices/companyRegisterForm'
+import { updateData, resetData, Inputs } from '../../../app/slices/companyRegisterForm'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -55,7 +55,11 @@ const CompanyRegister: React.FC = () => {
   }
 
   const submitNewCompany = () => {
-    console.log(formData)
+    if (formData) {
+      const formDataCopy: Inputs = JSON.parse(JSON.stringify(formData))
+      formDataCopy.companyLogo = JSON.parse(formData.companyLogo as string)
+      console.log(formDataCopy)
+    }
   }
 
   return (
@@ -88,7 +92,7 @@ const CompanyRegister: React.FC = () => {
               ))}
             </Stepper>
           </Box>
-          <Box sx={{ textAlign: 'center', width: '100%' }}>
+          <Box sx={{ textAlign: 'center', width: '100%', mt: 4, mb: 4 }}>
             {activeStep === steps.length
               ? (
               <>

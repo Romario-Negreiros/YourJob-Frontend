@@ -2,7 +2,7 @@ import React from 'react'
 
 import useStyles from '../../../styles/global'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { updateData, resetData } from '../../../app/slices/userRegisterForm'
+import { updateData, resetData, Inputs } from '../../../app/slices/userRegisterForm'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -55,11 +55,12 @@ const UserRegister: React.FC = () => {
   }
 
   const submitNewUser = () => {
-    const data = { ...formData }
-    if (formData?.profilePicture) {
-      data.profilePicture = JSON.parse(formData.profilePicture as string)
+    if (formData) {
+      const formDataCopy: Inputs = JSON.parse(JSON.stringify(formData))
+      formDataCopy.profilePicture = JSON.parse(formData.profilePicture as string)
+      formDataCopy.curriculum = JSON.parse(formData.curriculum as string)
+      console.log(formDataCopy)
     }
-    console.log(data)
   }
 
   return (
@@ -90,7 +91,7 @@ const UserRegister: React.FC = () => {
               ))}
             </Stepper>
           </Box>
-          <Box sx={{ textAlign: 'center', width: '100%' }}>
+          <Box sx={{ textAlign: 'center', width: '100%', mt: 4, mb: 4 }}>
             {activeStep === steps.length
               ? (
               <>
