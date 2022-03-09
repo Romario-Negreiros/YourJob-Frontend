@@ -3,6 +3,7 @@ import React from 'react'
 import useStyles from '../../../styles/global'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
 import { updateData, resetData, Inputs } from '../../../app/slices/userRegisterForm'
+import { storage } from '../../../lib/firebase'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -13,7 +14,8 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Paper from '@mui/material/Paper'
 import Link from '@mui/material/Link'
-import { Link as RouterLink } from 'react-router-dom'
+import CircularProgress from '@mui/material/CircularProgress'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { AuthForm, UserProfileForm } from '../../../components'
 
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
@@ -40,8 +42,11 @@ const steps: IStep[] = [
 
 const UserRegister: React.FC = () => {
   const [activeStep, setActiveStep] = React.useState(0)
+  const [isLoaded, setIsLoaded] = React.useState(true)
+  const [error, setError] = React.useState('')
   const classes = useStyles()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const formData = useAppSelector(state => state.userRegisterForm.data)
 
   const handleNext = () => setActiveStep(activeStep + 1)
@@ -54,15 +59,57 @@ const UserRegister: React.FC = () => {
     setActiveStep(0)
   }
 
-  const submitNewUser = () => {
+  const submitNewUser = async () => {
     if (formData) {
-      const formDataCopy: Inputs = JSON.parse(JSON.stringify(formData))
-      formDataCopy.profilePicture = JSON.parse(formData.profilePicture as string)
-      formDataCopy.curriculum = JSON.parse(formData.curriculum as string)
-      console.log(formDataCopy)
+      setIsLoaded(false)
+      setError('')
+      try {
+        const formDataCopy: Partial<Inputs> = JSON.parse(JSON.stringify(formData))
+        delete formDataCopy.confirmPassword
+        if (formData.profilePicture) {
+          const storageRef = storage.ref(storage.storage, `users/${formData.email}/picture`)
+          await storage.uploadBytesResumable(
+            storageRef,
+            JSON.parse(formDataCopy.profilePicture as string)
+          )
+          formDataCopy.profilePicture = await storage.getDownloadURL(storageRef)
+        }
+        if (formData.curriculum) {
+          const storageRef = storage.ref(storage.storage, `users/${formData.email}/picture`)
+          await storage.uploadBytesResumable(
+            storageRef,
+            JSON.parse(formDataCopy.profilePicture as string)
+          )
+          formDataCopy.curriculum = await storage.getDownloadURL(storageRef)
+        }
+        const response = await fetch('https://yourjob-api.herokuapp.com/users/register', {
+          method: 'POST',
+          body: JSON.stringify(formDataCopy),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        if (response.ok) {
+          navigate('/last_step')
+        } else {
+          const body = await response.json()
+          throw new Error(body.error)
+        }
+      } catch (err) {
+        err instanceof Error ? setError(err.message) : setError('Something unexpected happened!')
+      } finally {
+        setIsLoaded(true)
+      }
     }
   }
 
+  if (!isLoaded) {
+    return (
+      <Container className={classes.container} sx={{ display: 'grid', placeItems: 'center' }}>
+        <CircularProgress color="secondary" />
+      </Container>
+    )
+  }
   return (
     <Container className={classes.container}>
       <Paper className={classes.paper}>
@@ -101,6 +148,11 @@ const UserRegister: React.FC = () => {
                 <Button variant="contained" color="success" type="button" onClick={submitNewUser}>
                   Submit
                 </Button>
+                {error && (
+                  <Typography variant="body1" color="error" sx={{ mt: 2, mb: 1 }}>
+                    {error}
+                  </Typography>
+                )}
               </>
                 )
               : (

@@ -11,6 +11,7 @@ import { UserRegister, CompanyRegister } from './Register'
 import { UserProfile, CompanyProfile } from './Profile'
 import ForgotPassword from './ForgotPassword'
 import ResetPassword from './ResetPassword'
+import LastStepMessage from './LastStepMessage'
 import VerifyEmail from './VerifyEmail'
 import Companies from './Companies'
 import Users from './Users'
@@ -26,8 +27,9 @@ const Pages: React.FC = () => {
         <Route path="register" element={<UserRegister />} />
         <Route path="profile" element={<UserProfile />} />
         <Route path="forgot_password" element={<ForgotPassword />} />
-        <Route path="reset_password" element={<ResetPassword />} />
-        <Route path="verify_email" element={<VerifyEmail />} />
+        <Route path="reset_password/:token/:mode" element={<ResetPassword />} />
+        <Route path="last_step" element={<LastStepMessage />} />
+        <Route path="verify_email/:id/:token/:mode" element={<VerifyEmail />} />
         <Route path="users" element={<Users />} />
         <Route path="companies">
           <Route index element={<CompaniesHomePage />} />
