@@ -9,3 +9,10 @@ export interface Inputs {
 export interface Props {
   handleNext: () => void;
 }
+
+export interface Country {
+  name: string;
+  flags: string[];
+  alpha2Code: string;
+  callingCodes: string[]
+}

@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/userRegisterForm'
 import { styled } from '@mui/material/styles'
-import convertFileObj from '../../modules/convertFileObj'
+import convertFileObj from '../../utils/convertFileObj'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -32,13 +32,15 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
     }
   })
 
-  const onSubmit: SubmitHandler<Inputs> = ({ bio, profilePicture, curriculum }) => {
+  const onSubmit: SubmitHandler<Inputs> = ({ bio, age, workingArea, profilePicture, curriculum }) => {
     const stringifiedProfilePicture = convertFileObj(profilePicture[0])
     const stringifiedCurriculum = convertFileObj(curriculum[0])
 
     dispatch(
       updateData({
         bio,
+        age,
+        workingArea,
         profilePicture: stringifiedProfilePicture,
         curriculum: stringifiedCurriculum
       })
@@ -59,21 +61,23 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
       className={classes.grid}
       rowSpacing={4}
     >
-      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
+      <Grid item sx={{ textAlign: 'center' }} xs={12}>
         <TextField
           label="Bio"
-          sx={{ width: 240 }}
+          sx={{ width: '100%' }}
           {...register('bio', {
             required: {
               value: true,
               message: 'Bio is required'
             }
           })}
+          multiline
+          rows={3}
           error={errors.bio && true}
           helperText={errors.bio?.message}
         />
       </Grid>
-      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6}>
         <TextField
           label="Age"
           sx={{ width: 240 }}
@@ -86,13 +90,17 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
             min: {
               value: 18,
               message: 'Minimum age is 18'
+            },
+            maxLength: {
+              value: 2,
+              message: 'Maximum of two digits'
             }
           })}
           error={errors.age && true}
           helperText={errors.age?.message}
         />
       </Grid>
-      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
+      <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6}>
         <TextField
           label="Working Area"
           sx={{ width: 240 }}
