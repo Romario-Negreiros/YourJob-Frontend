@@ -64,6 +64,7 @@ const CompanyRegister: React.FC = () => {
       setIsLoaded(false)
       setError('')
       try {
+        console.log(formData.companyLogo)
         const formDataCopy: Partial<Inputs> = JSON.parse(JSON.stringify(formData))
         delete formDataCopy.confirmPassword
         if (formData.companyLogo) {
