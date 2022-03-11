@@ -12,7 +12,6 @@ export interface Props {
 
 export interface Country {
   name: string;
-  flags: string[];
   alpha2Code: string;
   callingCodes: string[]
 }

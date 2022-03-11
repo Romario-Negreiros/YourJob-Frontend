@@ -15,6 +15,8 @@ import Select from '@mui/material/Select'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import TextField from '@mui/material/TextField'
+import Snackbar from '@mui/material/Snackbar'
+import Alert from '@mui/material/Alert'
 
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
@@ -22,6 +24,7 @@ import { Props, Inputs, Country } from './interfaces'
 
 const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
   const [countries, setCountries] = React.useState<Country[]>([])
+  const [error, setError] = React.useState('')
   const initialState = useAppSelector(state => state.companyRegisterForm.data)
   const dispatch = useAppDispatch()
   const classes = useStyles()
@@ -40,9 +43,20 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
 
   const onSubmit: SubmitHandler<Inputs> = data => {
     const stringifiedCompanyLogo = convertFileObj(data.companyLogo[0])
-    dispatch(updateData({ ...data, companyLogo: stringifiedCompanyLogo }))
+    const country = countries.find(country => country.name === data.country)
+    dispatch(
+      updateData({ ...data, companyLogo: stringifiedCompanyLogo, alpha2Code: country?.alpha2Code })
+    )
 
     handleNext()
+  }
+
+  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setError('')
   }
 
   const Input = styled('input')({
@@ -53,12 +67,12 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
     ;(async () => {
       try {
         const response = await fetch(
-          'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes,flags'
+          'https://restcountries.com/v2/all?fields=name,alpha2Code,callingCodes'
         )
-        const countries = await response.json()
+        const countries: Country[] = await response.json()
         setCountries(countries)
       } catch (err) {
-        console.log(err)
+        setError('Unable to load list of countries!')
       }
     })()
   }, [])
@@ -71,6 +85,11 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
       className={classes.grid}
       rowSpacing={4}
     >
+      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleClose}>
+        <Alert severity="error" sx={{ width: '100%' }} onClose={handleClose}>
+          {error}
+        </Alert>
+      </Snackbar>
       <Grid item sx={{ textAlign: 'center' }} xs={12}>
         <TextField
           label="Description"
@@ -87,32 +106,54 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
           helperText={errors.description?.message}
         />
       </Grid>
-      <Grid item xs={12} lg={4} sx={{ textAlign: 'center' }}>
-        <FormControl sx={{ width: 240 }}>
-          <InputLabel id="country">Country</InputLabel>
-          <Select
-            labelId="country"
-            {...register('country', { required: { value: true, message: 'Country is required!' } })}
+      {!countries.length
+        ? (
+        <Grid item sx={{ textAlign: 'center' }} xs={12} lg={4}>
+          <TextField
             label="Country"
-          >
-            {countries.map(country => (
-              <MenuItem key={country.name} value={country.name} defaultValue=''>
-                {country.flags[0]} {country.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
+            sx={{ width: 240 }}
+            {...register('country', {
+              required: {
+                value: true,
+                message: 'Country is required!'
+              }
+            })}
+            error={errors.country && true}
+            helperText={errors.country?.message}
+          />
+        </Grid>
+          )
+        : (
+        <Grid item xs={12} lg={4} sx={{ textAlign: 'center' }}>
+          <FormControl sx={{ width: 240 }}>
+            <InputLabel id="country">Country</InputLabel>
+            <Select
+              labelId="country"
+              {...register('country', {
+                required: { value: true, message: 'Country is required!' }
+              })}
+              label={errors.country ? errors.country.message : 'Country'}
+              error={errors.country && true}
+            >
+              {countries.map(country => (
+                <MenuItem key={country.name} value={country.name} defaultValue="">
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+          )}
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
         <TextField
-          label="Contact Number"
-          sx={{ width: 240 }}
           {...register('contactNumber', {
             required: {
               value: true,
               message: 'Contact number is required!'
             }
           })}
+          label="Contact number"
+          sx={{ width: 240 }}
           error={errors.contactNumber && true}
           helperText={errors.contactNumber?.message}
         />
