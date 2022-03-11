@@ -5,6 +5,7 @@ import { Inputs as CompanyProfileFormInputs } from '../../components/CompanyProf
 
 export interface Inputs extends AuthFormInputs, Omit<CompanyProfileFormInputs, 'companyLogo'> {
   companyLogo: string
+  alpha2Code: string
 }
 
 type FormState = {
