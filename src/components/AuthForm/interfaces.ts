@@ -9,5 +9,6 @@ export interface Inputs {
 
 export interface Props {
   handleNext: () => void;
-  updateData: ActionCreatorWithPayload<Partial<Inputs>, string>
+  updateData: ActionCreatorWithPayload<Partial<Inputs>, string>;
+  mode: string;
 }

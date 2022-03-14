@@ -57,6 +57,7 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
     <Grid
       container
       component="form"
+      autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
       className={classes.grid}
       rowSpacing={4}

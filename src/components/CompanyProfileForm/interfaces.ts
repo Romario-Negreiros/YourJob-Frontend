@@ -1,7 +1,7 @@
 export interface Inputs {
   description: string;
   country: string;
-  contactNumber: string;
+  contactNumber: number;
   website: string;
   companyLogo: FileList;
 }
@@ -11,7 +11,18 @@ export interface Props {
 }
 
 export interface Country {
-  name: string;
-  alpha2Code: string;
-  callingCodes: string[]
+  name: {
+    common: string;
+    official: string;
+    nativeName: Object;
+  }
+  cca2: string;
+  idd: {
+    root: string;
+    suffixes: string[];
+  }
+  flags: {
+    svg: string;
+    png: string;
+  };
 }

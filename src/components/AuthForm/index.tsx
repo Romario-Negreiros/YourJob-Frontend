@@ -12,10 +12,15 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 
 import { Props, Inputs } from './interfaces'
 
-const AuthForm: React.FC<Props> = ({ handleNext, updateData }) => {
+const AuthForm: React.FC<Props> = ({ handleNext, updateData, mode }) => {
   const classes = useStyles()
   const dispatch = useAppDispatch()
-  const initialState = useAppSelector(state => state.userRegisterForm.data)
+  const initialState = useAppSelector(state => {
+    if (mode === 'user') {
+      return state.userRegisterForm.data
+    }
+    return state.companyRegisterForm.data
+  })
   const {
     register,
     handleSubmit,
@@ -36,7 +41,7 @@ const AuthForm: React.FC<Props> = ({ handleNext, updateData }) => {
       )
       return
     }
-    dispatch(updateData({ ...data }))
+    dispatch(updateData(data))
 
     handleNext()
   }
@@ -45,6 +50,7 @@ const AuthForm: React.FC<Props> = ({ handleNext, updateData }) => {
     <Grid
       container
       component="form"
+      autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
       className={classes.grid}
       rowSpacing={4}
