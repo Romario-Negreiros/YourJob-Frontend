@@ -6,10 +6,11 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Link from '@mui/material/Link'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useParams } from 'react-router-dom'
 
 const LastStepMessage: React.FC = () => {
   const classes = useStyles()
+  const { name } = useParams()
 
   return (
     <Box className={classes.box} sx={{ p: 4 }}>
@@ -20,7 +21,7 @@ const LastStepMessage: React.FC = () => {
           component="div"
           sx={{ width: '100%', textAlign: 'center' }}
         >
-          Just One More Step
+          Welcome, {name}
         </Typography>
         <Box sx={{ width: '100%', textAlign: 'center' }}>
           <Typography variant="body1">

@@ -29,7 +29,7 @@ const steps: IStep[] = [
   {
     label: 'Authentication',
     renderComponent: handleNext => {
-      return <AuthForm handleNext={handleNext} updateData={updateData} />
+      return <AuthForm handleNext={handleNext} updateData={updateData} mode="user" />
     }
   },
   {
@@ -75,7 +75,7 @@ const UserRegister: React.FC = () => {
           formDataCopy.profilePicture = await storage.getDownloadURL(storageRef)
         }
         if (formData.curriculum) {
-          const storageRef = storage.ref(storage.storage, `users/${formData.email}/picture`)
+          const storageRef = storage.ref(storage.storage, `users/${formData.email}/curriculum`)
           await storage.uploadBytesResumable(
             storageRef,
             JSON.parse(formDataCopy.profilePicture as string)
@@ -89,10 +89,14 @@ const UserRegister: React.FC = () => {
             'Content-Type': 'application/json'
           }
         })
+        const body = await response.json()
         if (response.ok) {
-          navigate('/last_step')
+          navigate(`/last_step/${body.user.name}`)
+
+          dispatch(resetData())
         } else {
-          const body = await response.json()
+          await storage.deleteObject(storage.ref(storage.storage, `users/${formData.email}/picture`))
+          await storage.deleteObject(storage.ref(storage.storage, `users/${formData.email}/curriculum`))
           throw new Error(body.error)
         }
       } catch (err) {

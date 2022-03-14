@@ -29,7 +29,7 @@ const steps: IStep[] = [
   {
     label: 'Authentication',
     renderComponent: handleNext => {
-      return <AuthForm handleNext={handleNext} updateData={updateData} />
+      return <AuthForm handleNext={handleNext} updateData={updateData} mode="company" />
     }
   },
   {
@@ -64,11 +64,10 @@ const CompanyRegister: React.FC = () => {
       setIsLoaded(false)
       setError('')
       try {
-        console.log(formData.companyLogo)
         const formDataCopy: Partial<Inputs> = JSON.parse(JSON.stringify(formData))
+        const storageRef = storage.ref(storage.storage, `companies/${formDataCopy.email}/logo`)
         delete formDataCopy.confirmPassword
         if (formData.companyLogo) {
-          const storageRef = storage.ref(storage.storage, `companies/${formDataCopy.email}/logo`)
           await storage.uploadBytesResumable(
             storageRef,
             JSON.parse(formDataCopy.companyLogo as string)
@@ -82,10 +81,13 @@ const CompanyRegister: React.FC = () => {
             'Content-Type': 'application/json'
           }
         })
+        const body = await response.json()
         if (response.ok) {
-          navigate('/last_step')
+          navigate(`/last_step/${body.company.name}`)
+
+          dispatch(resetData())
         } else {
-          const body = await response.json()
+          await storage.deleteObject(storageRef)
           throw new Error(body.error)
         }
       } catch (err) {
