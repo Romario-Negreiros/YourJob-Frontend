@@ -8,6 +8,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Paper from '@mui/material/Paper'
 import Link from '@mui/material/Link'
+import Alert from '@mui/material/Alert'
+import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import { Link as RouterLink } from 'react-router-dom'
@@ -18,7 +20,9 @@ interface Inputs {
 }
 
 const Login: React.FC = () => {
-  const [loginMode, setLoginMode] = React.useState('user')
+  const [loginMode, setLoginMode] = React.useState('users')
+  const [error, setError] = React.useState('')
+  const [isLoaded, setIsLoaded] = React.useState(true)
   const {
     register,
     handleSubmit,
@@ -27,17 +31,61 @@ const Login: React.FC = () => {
   const classes = useStyles()
 
   const handleLoginMode = () => {
-    if (loginMode === 'user') {
-      setLoginMode('company')
+    if (loginMode === 'users') {
+      setLoginMode('companies')
       return
     }
-    setLoginMode('user')
+    setLoginMode('users')
   }
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-    console.log(data)
+    (async () => {
+      setIsLoaded(false)
+      try {
+        const response = await fetch(`https://yourjob-api.heroku.app/${loginMode}/authenticate`, {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const body = await response.json()
+        if (response.ok) {
+          localStorage.setItem('jwt', body.token)
+          if (body.user) {
+            console.log(body.user)
+            return
+          }
+          console.log(body.company)
+          return
+        }
+        throw new Error(body.error)
+      } catch (err) {
+        err instanceof Error ? setError(err.message) : setError('Failed to log in, please try again!')
+      } finally {
+        setIsLoaded(true)
+      }
+    })()
   }
 
+  if (!isLoaded) {
+    return (
+      <Container className={classes.container}>
+        <CircularProgress color="secondary" />
+      </Container>
+    )
+  } else if (error) {
+    return (
+      <Container className={classes.container}>
+        <Alert severity="error">
+          {error}
+        </Alert>
+        <Button onClick={() => setError('')} variant="outlined" color="warning">
+          Dismiss
+        </Button>
+      </Container>
+    )
+  }
   return (
     <Container className={classes.container}>
       <Paper className={classes.paper}>

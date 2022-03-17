@@ -95,8 +95,16 @@ const UserRegister: React.FC = () => {
 
           dispatch(resetData())
         } else {
-          await storage.deleteObject(storage.ref(storage.storage, `users/${formData.email}/picture`))
-          await storage.deleteObject(storage.ref(storage.storage, `users/${formData.email}/curriculum`))
+          if (formData.profilePicture) {
+            await storage.deleteObject(
+              storage.ref(storage.storage, `users/${formData.email}/picture`)
+            )
+          }
+          if (formData.curriculum) {
+            await storage.deleteObject(
+              storage.ref(storage.storage, `users/${formData.email}/curriculum`)
+            )
+          }
           throw new Error(body.error)
         }
       } catch (err) {

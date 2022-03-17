@@ -87,7 +87,9 @@ const CompanyRegister: React.FC = () => {
 
           dispatch(resetData())
         } else {
-          await storage.deleteObject(storageRef)
+          if (formData.companyLogo) {
+            await storage.deleteObject(storageRef)
+          }
           throw new Error(body.error)
         }
       } catch (err) {
