@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) => {
       }
     },
     container: {
-      display: 'flex',
+      display: 'flex !important',
       justifyContent: 'center',
       alignItems: 'center',
       width: '100vw',
