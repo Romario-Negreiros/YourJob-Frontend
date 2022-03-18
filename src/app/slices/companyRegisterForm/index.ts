@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Inputs as AuthFormInputs } from '../../components/AuthForm/interfaces'
-import { Inputs as CompanyProfileFormInputs } from '../../components/CompanyProfileForm/interfaces'
+import { Inputs as AuthFormInputs } from '../../../components/AuthForm/interfaces'
+import { Inputs as CompanyProfileFormInputs } from '../../../components/CompanyProfileForm/interfaces'
 
 export interface Inputs extends AuthFormInputs, Omit<CompanyProfileFormInputs, 'companyLogo'> {
   companyLogo: string

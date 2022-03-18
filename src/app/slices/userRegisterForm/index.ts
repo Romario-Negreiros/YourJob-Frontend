@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { Inputs as AuthFormInputs } from '../../components/AuthForm/interfaces'
-import { Inputs as UserProfileFormInputs } from '../../components/UserProfileForm/interfaces'
+import { Inputs as AuthFormInputs } from '../../../components/AuthForm/interfaces'
+import { Inputs as UserProfileFormInputs } from '../../../components/UserProfileForm/interfaces'
 
 export interface Inputs
   extends AuthFormInputs,
