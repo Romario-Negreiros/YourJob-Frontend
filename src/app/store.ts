@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import { userRegisterForm, companyRegisterForm } from './slices'
+import { userRegisterForm, companyRegisterForm, user, company } from './slices'
 
 const store = configureStore({
   reducer: {
     userRegisterForm,
-    companyRegisterForm
+    companyRegisterForm,
+    user,
+    company
   }
 })
 
