@@ -78,7 +78,7 @@ const UserRegister: React.FC = () => {
           const storageRef = storage.ref(storage.storage, `users/${formData.email}/curriculum`)
           await storage.uploadBytesResumable(
             storageRef,
-            JSON.parse(formDataCopy.profilePicture as string)
+            JSON.parse(formDataCopy.curriculum as string)
           )
           formDataCopy.curriculum = await storage.getDownloadURL(storageRef)
         }
@@ -105,7 +105,9 @@ const UserRegister: React.FC = () => {
               storage.ref(storage.storage, `users/${formData.email}/curriculum`)
             )
           }
-          throw new Error(body.error)
+          if (body.error) {
+            throw new Error(body.error)
+          }
         }
       } catch (err) {
         err instanceof Error ? setError(err.message) : setError('Something unexpected happened!')

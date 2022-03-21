@@ -2,6 +2,9 @@ import React from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import useStyles from './styles'
+import { useAppDispatch } from '../../app/hooks'
+import { setUser } from '../../app/slices/user'
+import { setCompany } from '../../app/slices/company'
 
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -12,7 +15,7 @@ import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 
 interface Inputs {
   email: string
@@ -28,7 +31,9 @@ const Login: React.FC = () => {
     handleSubmit,
     formState: { errors }
   } = useForm<Inputs>()
+  const dispatch = useAppDispatch()
   const classes = useStyles()
+  const navigate = useNavigate()
 
   const handleLoginMode = () => {
     if (loginMode === 'users') {
@@ -38,34 +43,36 @@ const Login: React.FC = () => {
     setLoginMode('users')
   }
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
-    (async () => {
-      setIsLoaded(false)
-      try {
-        const response = await fetch(`https://yourjob-api.heroku.app/${loginMode}/authenticate`, {
-          method: 'POST',
-          body: JSON.stringify(data),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        const body = await response.json()
-        if (response.ok) {
-          localStorage.setItem('jwt', body.token)
-          if (body.user) {
-            console.log(body.user)
-            return
-          }
-          console.log(body.company)
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    setIsLoaded(false)
+    try {
+      const response = await fetch(`https://yourjob-api.herokuapp.com/${loginMode}/authenticate`, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const body = await response.json()
+      if (response.ok) {
+        localStorage.setItem('jwt', body.token)
+        if (body.user) {
+          dispatch(setUser(body.user))
+          navigate('/profile')
           return
         }
-        throw new Error(body.error)
-      } catch (err) {
-        err instanceof Error ? setError(err.message) : setError('Failed to log in, please try again!')
-      } finally {
-        setIsLoaded(true)
+        dispatch(setCompany(body.company))
+        navigate('/companies/profile')
+        return
       }
-    })()
+      if (body.error) {
+        throw new Error(body.error)
+      }
+    } catch (err) {
+      err instanceof Error ? setError(err.message) : setError('Failed to log in, please try again!')
+    } finally {
+      setIsLoaded(true)
+    }
   }
 
   if (!isLoaded) {
@@ -76,10 +83,9 @@ const Login: React.FC = () => {
     )
   } else if (error) {
     return (
-      <Container className={classes.container}>
-        <Alert severity="error">
-          {error}
-        </Alert>
+      <Container className={classes.container} sx={{ flexDirection: 'column' }}>
+        <Alert severity="error">{error}</Alert>
+        <br />
         <Button onClick={() => setError('')} variant="outlined" color="warning">
           Dismiss
         </Button>
@@ -116,6 +122,7 @@ const Login: React.FC = () => {
             <TextField
               sx={{ width: 240, mt: 3 }}
               label="Password"
+              type="password"
               {...register('password', {
                 required: { value: true, message: 'Password is required!' }
               })}
@@ -132,7 +139,7 @@ const Login: React.FC = () => {
               sx={{ mt: 3, mb: 3, width: 240 }}
               onClick={handleLoginMode}
             >
-              Log in as {loginMode === 'user' ? 'a company' : 'an user'}
+              Logging in as {loginMode === 'users' ? 'a user' : 'an company'}
             </Button>
             <RouterLink to="/register">
               <Link underline="always" component="button" variant="h6">

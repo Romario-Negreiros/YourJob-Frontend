@@ -90,7 +90,9 @@ const CompanyRegister: React.FC = () => {
           if (formData.companyLogo) {
             await storage.deleteObject(storageRef)
           }
-          throw new Error(body.error)
+          if (body.error) {
+            throw new Error(body.error)
+          }
         }
       } catch (err) {
         err instanceof Error ? setError(err.message) : setError('Something unexpected happened!')
