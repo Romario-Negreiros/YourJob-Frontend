@@ -15,7 +15,11 @@ import Alert from '@mui/material/Alert'
 import CircularProgress from '@mui/material/CircularProgress'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
+import InputAdornment from '@mui/material/InputAdornment'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
+
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 
 interface Inputs {
   email: string
@@ -26,6 +30,7 @@ const Login: React.FC = () => {
   const [loginMode, setLoginMode] = React.useState('users')
   const [error, setError] = React.useState('')
   const [isLoaded, setIsLoaded] = React.useState(true)
+  const [isVisible, setIsVisible] = React.useState(false)
   const {
     register,
     handleSubmit,
@@ -42,6 +47,8 @@ const Login: React.FC = () => {
     }
     setLoginMode('users')
   }
+
+  const handleVisibility = () => setIsVisible(!isVisible)
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     setIsLoaded(false)
@@ -86,7 +93,7 @@ const Login: React.FC = () => {
       <Container className={classes.container} sx={{ flexDirection: 'column' }}>
         <Alert severity="error">{error}</Alert>
         <br />
-        <Button onClick={() => setError('')} variant="outlined" color="warning">
+        <Button onClick={() => setError('')} variant="contained" color="error">
           Dismiss
         </Button>
       </Container>
@@ -120,9 +127,22 @@ const Login: React.FC = () => {
             />
             <br />
             <TextField
-              sx={{ width: 240, mt: 3 }}
               label="Password"
-              type="password"
+              sx={{ width: 240, mt: 3 }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end" sx={{ cursor: 'pointer' }} onClick={handleVisibility}>
+                    {isVisible
+                      ? (
+                      <VisibilityOffIcon color="secondary" />
+                        )
+                      : (
+                      <VisibilityIcon color="secondary" />
+                        )}
+                  </InputAdornment>
+                )
+              }}
+              type={isVisible ? 'text' : 'password'}
               {...register('password', {
                 required: { value: true, message: 'Password is required!' }
               })}
@@ -136,10 +156,13 @@ const Login: React.FC = () => {
               type="button"
               variant="contained"
               color="secondary"
-              sx={{ mt: 3, mb: 3, width: 240 }}
+              sx={{ mt: 3, mb: 1, width: 240 }}
               onClick={handleLoginMode}
             >
               Logging in as {loginMode === 'users' ? 'a user' : 'an company'}
+            </Button>
+            <Button type="submit" variant="contained" sx={{ mt: 1, mb: 2, width: 240 }}>
+              Log in
             </Button>
             <RouterLink to="/register">
               <Link underline="always" component="button" variant="h6">
@@ -158,10 +181,6 @@ const Login: React.FC = () => {
                 Forgot Your Password?
               </Link>
             </RouterLink>
-            <br />
-            <Button type="submit" variant="contained" sx={{ mt: 3, width: 240 }}>
-              Log in
-            </Button>
           </Box>
         </Box>
       </Paper>

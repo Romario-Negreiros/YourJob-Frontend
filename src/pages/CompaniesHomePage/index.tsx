@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Link from '@mui/material/Link'
 import { Link as RouterLink } from 'react-router-dom'
 import Lottie from 'lottie-react'
+import { Navigation } from '../../components'
 
 import Building from '../../assets/animations/building.json'
 
@@ -16,6 +17,9 @@ const CompaniesHomePage: React.FC = () => {
 
   return (
     <Grid container columns={{ xs: 1, md: 2 }} columnSpacing={2}>
+      <Grid item xs={1} md={2}>
+        <Navigation />
+      </Grid>
       <Grid item className={classes.grid} xs={1}>
         <Typography className={`${classes.typography} ${classes.customFont}`}>
           Share and enhance your company!
