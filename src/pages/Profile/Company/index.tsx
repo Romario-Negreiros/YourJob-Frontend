@@ -1,11 +1,15 @@
 import React from 'react'
 
 import useStyles from '../styles'
+import { useAppSelector } from '../../../app/hooks'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
+import CircularProgress from '@mui/material/CircularProgress'
+import Alert from '@mui/material/Alert'
 import {
   ProfileDrawer,
   CreatedVagancies,
@@ -20,44 +24,59 @@ import PeopleIcon from '@mui/icons-material/People'
 import AddIcon from '@mui/icons-material/Add'
 import ThumbsUpDownIcon from '@mui/icons-material/ThumbsUpDown'
 
-import { Item } from '../interfaces'
+import { CompanyItem } from '../interfaces'
+import { Company } from '../../../app/slices/company/interfaces'
 
-const initialListItems: Item[] = [
+const initialListItems: CompanyItem[] = [
   {
     text: 'Profile Info',
     icon: <BusinessIcon color="primary" />,
-    component: <CompanyProfileInfo key="proflieInfo" />,
+    renderComponent: (company: Company) => (
+      <CompanyProfileInfo key="proflieInfo" company={company} />
+    ),
     active: true
   },
   {
     text: 'Created Vagancies',
     icon: <PeopleIcon color="primary" />,
-    component: <CreatedVagancies key="createdVagancies" />,
+    renderComponent: (company: Company) => (
+      <CreatedVagancies key="createdVagancies" company={company} />
+    ),
     active: false
   },
   {
     text: 'Create Vagancy',
     icon: <AddIcon color="primary" />,
-    component: <CreateVagancyForm key="createVagancyForm" />,
+    renderComponent: (company: Company) => (
+      <CreateVagancyForm key="createVagancyForm" company={company} />
+    ),
     active: false
   },
   {
     text: 'Avaliations',
     icon: <ThumbsUpDownIcon color="primary" />,
-    component: <Avaliations key="avaliations" />,
+    renderComponent: (company: Company) => <Avaliations key="avaliations" company={company} />,
     active: false
   },
   {
     text: 'Avaliate',
     icon: <AddIcon color="primary" />,
-    component: <CreateAvaliationForm key="createAvaliationForm" />,
+    renderComponent: (company: Company) => (
+      <CreateAvaliationForm key="createAvaliationForm" company={company} />
+    ),
     active: false
   }
 ]
 
 const CompanyProfile: React.FC = () => {
-  const [listItems, setListItems] = React.useState<Item[]>(initialListItems)
+  const [listItems, setListItems] = React.useState<CompanyItem[]>(initialListItems)
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [company, setCompany] = React.useState<Company | null>(null)
+  const [isLoaded, setIsLoaded] = React.useState(false)
+  const [error, setError] = React.useState('')
+  const currentCompany = useAppSelector(state => state.company.data)
+  const params = useParams()
+  const navigate = useNavigate()
   const classes = useStyles()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
@@ -70,6 +89,70 @@ const CompanyProfile: React.FC = () => {
     setListItems(listItemsCopy)
   }
 
+  const goBack = () => {
+    navigate(-1)
+  }
+
+  React.useEffect(() => {
+    if (currentCompany && params.id === currentCompany.id) {
+      setCompany(currentCompany)
+      setIsLoaded(true)
+    } else {
+      (async () => {
+        try {
+          const response = await fetch(
+            `https://yourjob-api.herokuapp.com/companies/profile/${params.id}`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          )
+          const body = await response.json()
+          if (response.ok) {
+            setCompany(body.company as Company)
+            return
+          }
+          throw new Error(body.error)
+        } catch (err) {
+          err instanceof Error
+            ? setError(err.message)
+            : setError("Unable to load company's profile!")
+        } finally {
+          setIsLoaded(true)
+        }
+      })()
+    }
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <Box
+        className={classes.box}
+        sx={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <CircularProgress color="secondary" />
+      </Box>
+    )
+  } else if (error) {
+    return (
+      <Box
+        className={classes.box}
+        sx={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: '5px'
+        }}
+      >
+        <Alert severity="error">{error}</Alert>
+        <Button variant="outlined" color="error" onClick={goBack}>
+          Go back
+        </Button>
+      </Box>
+    )
+  }
   return (
     <Box className={classes.box}>
       <Box component="nav" sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }}>
@@ -113,7 +196,7 @@ const CompanyProfile: React.FC = () => {
         <Grid item xs={12}>
           {listItems.map(item => {
             if (item.active) {
-              return item.component
+              return item.renderComponent(company as Company)
             } else return null
           })}
         </Grid>

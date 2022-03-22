@@ -1,36 +1,47 @@
 import React from 'react'
 
 import useStyles from '../styles'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useAppSelector } from '../../../app/hooks'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
+import CircularProgress from '@mui/material/CircularProgress'
+import Alert from '@mui/material/Alert'
 import { ProfileDrawer, SavedVagancies, UserProfileInfo } from '../../../components'
 
 import BookmarksIcon from '@mui/icons-material/Bookmarks'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
 
-import { Item } from '../interfaces'
+import { UserItem } from '../interfaces'
+import { User } from '../../../app/slices/user/interfaces'
 
-const initialListItems: Item[] = [
+const initialListItems: UserItem[] = [
   {
     text: 'Profile Info',
-    icon: <AccountBoxIcon color="primary"/>,
-    component: <UserProfileInfo key="proflieInfo" />,
+    icon: <AccountBoxIcon color="primary" />,
+    renderComponent: (user: User, isCurrentUser?: boolean) => <UserProfileInfo key="proflieInfo" user={user} isCurrentUser={isCurrentUser}/>,
     active: true
   },
   {
     text: 'Saved Vagancies',
-    icon: <BookmarksIcon color="primary"/>,
-    component: <SavedVagancies key="savedVagancies" />,
+    icon: <BookmarksIcon color="primary" />,
+    renderComponent: (user: User) => <SavedVagancies key="savedVagancies" user={user} />,
     active: false
   }
 ]
 
 const UserProfile: React.FC = () => {
-  const [listItems, setListItems] = React.useState<Item[]>(initialListItems)
+  const [listItems, setListItems] = React.useState<UserItem[]>(initialListItems)
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [user, setUser] = React.useState<User | null>(null)
+  const [isLoaded, setIsLoaded] = React.useState(false)
+  const [error, setError] = React.useState('')
+  const currentUser = useAppSelector(state => state.user.data)
+  const params = useParams()
+  const navigate = useNavigate()
   const classes = useStyles()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
@@ -42,6 +53,68 @@ const UserProfile: React.FC = () => {
     setListItems(listItemsCopy)
   }
 
+  const goBack = () => {
+    navigate(-1)
+  }
+
+  React.useEffect(() => {
+    if (currentUser && params.id === currentUser.id) {
+      setUser(currentUser)
+      setIsLoaded(true)
+    } else {
+      (async () => {
+        try {
+          const response = await fetch(
+            `https://yourjob-api.herokuapp.com/users/profile/${params.id}`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          )
+          const body = await response.json()
+          if (response.ok) {
+            setUser(body.user as User)
+            return
+          }
+          throw new Error(body.error)
+        } catch (err) {
+          err instanceof Error ? setError(err.message) : setError("Unable to load user's profile!")
+        } finally {
+          setIsLoaded(true)
+        }
+      })()
+    }
+  }, [])
+
+  if (!isLoaded) {
+    return (
+      <Box
+        className={classes.box}
+        sx={{ width: '100%', justifyContent: 'center', alignItems: 'center' }}
+      >
+        <CircularProgress color="secondary" />
+      </Box>
+    )
+  } else if (error) {
+    return (
+      <Box
+        className={classes.box}
+        sx={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexDirection: 'column',
+          gap: '5px'
+        }}
+      >
+        <Alert severity="error">{error}</Alert>
+        <Button variant="outlined" color="error" onClick={goBack}>
+          Go back
+        </Button>
+      </Box>
+    )
+  }
   return (
     <Box className={classes.box}>
       <Box component="nav" sx={{ width: { sm: 240 }, flexShrink: { sm: 0 } }}>
@@ -57,7 +130,11 @@ const UserProfile: React.FC = () => {
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }
           }}
         >
-          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem} handleDrawerToggle={handleDrawerToggle}/>
+          <ProfileDrawer
+            listItems={listItems}
+            handleActiveItem={handleActiveItem}
+            handleDrawerToggle={handleDrawerToggle}
+          />
         </Drawer>
         <Drawer
           variant="permanent"
@@ -65,10 +142,10 @@ const UserProfile: React.FC = () => {
             width: 240,
             flexShrink: 0,
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box' }
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 }
           }}
         >
-          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem}/>
+          <ProfileDrawer listItems={listItems} handleActiveItem={handleActiveItem} />
         </Drawer>
       </Box>
 
@@ -81,7 +158,7 @@ const UserProfile: React.FC = () => {
         <Grid item xs={12}>
           {listItems.map(item => {
             if (item.active) {
-              return item.component
+              return item.renderComponent(user as User)
             } else return null
           })}
         </Grid>

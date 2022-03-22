@@ -25,7 +25,7 @@ const Pages: React.FC = () => {
         <Route path="*" element={<NoMatch />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<UserRegister />} />
-        <Route path="profile" element={<UserProfile />} />
+        <Route path="profile/:id" element={<UserProfile />} />
         <Route path="forgot_password" element={<ForgotPassword />} />
         <Route path="reset_password/:token/:mode" element={<ResetPassword />} />
         <Route path="last_step/:name" element={<LastStepMessage />} />
@@ -35,7 +35,7 @@ const Pages: React.FC = () => {
           <Route index element={<CompaniesHomePage />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<CompanyRegister />} />
-          <Route path="profile" element={<CompanyProfile />} />
+          <Route path="profile/:id" element={<CompanyProfile />} />
           <Route path="list" element={<Companies />} />
         </Route>
       </Route>
