@@ -10,7 +10,13 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 
-const CompanyProfileInfo: React.FC = () => {
+import { Company } from '../../app/slices/company/interfaces'
+
+interface Props {
+  company: Company
+}
+
+const CompanyProfileInfo: React.FC<Props> = ({ company }) => {
   const classes = useStyles()
 
   return (

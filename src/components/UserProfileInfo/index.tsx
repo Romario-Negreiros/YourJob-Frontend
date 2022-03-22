@@ -10,7 +10,14 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
 
-const UserProfileInfo: React.FC = () => {
+import { User } from '../../app/slices/user/interfaces'
+
+interface Props {
+  user: User
+  isCurrentUser?: boolean
+}
+
+const UserProfileInfo: React.FC<Props> = ({ user, isCurrentUser }) => {
   const classes = useStyles()
 
   return (
@@ -25,7 +32,7 @@ const UserProfileInfo: React.FC = () => {
               Name
             </Typography>
             <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              user.name
+              {user.name}
             </Typography>
           </Box>
           <Button variant="contained">Change</Button>

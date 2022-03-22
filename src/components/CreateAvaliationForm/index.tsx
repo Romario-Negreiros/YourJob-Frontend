@@ -8,7 +8,13 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-const CreateAvaliationForm: React.FC = () => {
+import { Company } from '../../app/slices/company/interfaces'
+
+interface Props {
+  company: Company
+}
+
+const CreateAvaliationForm: React.FC<Props> = ({ company }) => {
   const [recommendation, setRecommendation] = React.useState('')
   const [grade, setGrade] = React.useState<string | number>('')
 

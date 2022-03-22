@@ -9,7 +9,13 @@ import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import Rating from '@mui/material/Rating'
 
-const Avaliations: React.FC = () => {
+import { Company } from '../../app/slices/company/interfaces'
+
+interface Props {
+  company: Company
+}
+
+const Avaliations: React.FC<Props> = ({ company }) => {
   return (
     <Grid container spacing={2}>
       {new Array(10).fill(1).map((v, i) => (

@@ -3,7 +3,7 @@ import React from 'react'
 interface Item {
   text: string
   icon: React.ReactElement
-  component: React.ReactElement
+  renderComponent: (arg0: any) => React.ReactElement
   active: boolean
 }
 
