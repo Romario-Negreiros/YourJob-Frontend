@@ -88,7 +88,6 @@ const UserProfile: React.FC = () => {
           )
           const body = await response.json()
           if (response.ok) {
-            console.log(body)
             setUser(body.user as User)
             return
           }
