@@ -4,7 +4,6 @@ import useStyles from './styles'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/userRegisterForm'
-import { styled } from '@mui/material/styles'
 import convertFileObj from '../../utils/convertFileObj'
 
 import Grid from '@mui/material/Grid'
@@ -48,10 +47,6 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
 
     handleNext()
   }
-
-  const Input = styled('input')({
-    display: 'none'
-  })
 
   return (
     <Grid
@@ -118,10 +113,12 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6}>
         <label htmlFor="profile-picture">
           <Typography variant="body2">Profile picture</Typography>
-          <Input
+          <TextField
             {...register('profilePicture')}
             type="file"
-            accept="image/*"
+            inputProps={{
+              accept: 'image/*'
+            }}
             id="profile-picture"
             sx={{ display: 'none' }}
           />
@@ -133,10 +130,12 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6}>
         <label htmlFor="curriculum">
           <Typography variant="body2">Curriculum</Typography>
-          <Input
+          <TextField
             {...register('curriculum')}
             type="file"
-            accept="file/*"
+            inputProps={{
+              accept: '.docx,.pdf'
+            }}
             id="curriculum"
             sx={{ display: 'none' }}
           />
