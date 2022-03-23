@@ -94,6 +94,10 @@ const CompanyProfile: React.FC = () => {
   }
 
   React.useEffect(() => {
+    if (!params.id?.match(/^\d*$/)) {
+      setError('Invalid company id!')
+      setIsLoaded(true)
+    }
     if (currentCompany && params.id === currentCompany.id) {
       setCompany(currentCompany)
       setIsLoaded(true)

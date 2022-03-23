@@ -58,7 +58,10 @@ const UserProfile: React.FC = () => {
   }
 
   React.useEffect(() => {
-    if (currentUser && params.id === currentUser.id) {
+    if (!params.id?.match(/^\d*$/)) {
+      setError('Invalid user id!')
+      setIsLoaded(true)
+    } else if (currentUser && params.id === currentUser.id) {
       setUser(currentUser)
       setIsLoaded(true)
     } else {
