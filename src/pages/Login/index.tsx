@@ -65,11 +65,11 @@ const Login: React.FC = () => {
         localStorage.setItem('jwt', body.token)
         if (body.user) {
           dispatch(setUser(body.user))
-          navigate('/profile')
+          navigate(`/profile/${body.user.id}`)
           return
         }
         dispatch(setCompany(body.company))
-        navigate('/companies/profile')
+        navigate(`/companies/profile/${body.company.id}`)
         return
       }
       if (body.error) {

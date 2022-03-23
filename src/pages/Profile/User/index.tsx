@@ -22,7 +22,18 @@ const initialListItems: UserItem[] = [
   {
     text: 'Profile Info',
     icon: <AccountBoxIcon color="primary" />,
-    renderComponent: (user: User, isCurrentUser?: boolean) => <UserProfileInfo key="proflieInfo" user={user} isCurrentUser={isCurrentUser}/>,
+    renderComponent: (
+      user: User,
+      setUser: (user: User | null) => void,
+      isCurrentUser?: boolean
+    ) => (
+      <UserProfileInfo
+        key="proflieInfo"
+        user={user}
+        setUser={setUser}
+        isCurrentUser={isCurrentUser}
+      />
+    ),
     active: true
   },
   {
@@ -77,6 +88,7 @@ const UserProfile: React.FC = () => {
           )
           const body = await response.json()
           if (response.ok) {
+            console.log(body)
             setUser(body.user as User)
             return
           }
@@ -161,6 +173,9 @@ const UserProfile: React.FC = () => {
         <Grid item xs={12}>
           {listItems.map(item => {
             if (item.active) {
+              if (user?.id === currentUser?.id) {
+                return item.renderComponent(user as User, setUser, true)
+              }
               return item.renderComponent(user as User)
             } else return null
           })}
