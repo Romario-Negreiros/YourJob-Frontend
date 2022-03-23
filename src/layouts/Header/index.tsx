@@ -73,7 +73,7 @@ const Header: React.FC = () => {
           ))}
           {currentState.user.data && (
             <Tooltip title="Profile" placement="bottom-start">
-              <Link to="/profile" aria-label="Go to profile page">
+              <Link to={`/profile/${currentState.user.data.id}`} aria-label="Go to profile page">
                 <IconButton size="large" edge="end">
                   <AccountIcon />
                 </IconButton>
@@ -82,7 +82,7 @@ const Header: React.FC = () => {
           )}
           {currentState.company.data && (
             <Tooltip title="Profile" placement="bottom-start">
-              <Link to="/companies/profile" aria-label="Go to profile page">
+              <Link to={`/companies/profile/${currentState.company.data.id}`} aria-label="Go to profile page">
                 <IconButton size="large" edge="end">
                   <AccountIcon />
                 </IconButton>
@@ -128,12 +128,12 @@ const Header: React.FC = () => {
             </Link>
           ))}
           {currentState.user.data && (
-            <Link to="/profile" aria-label="Go to profile page" onClick={handleCloseMenu}>
+            <Link to={`/profile/${currentState.user.data.id}`} aria-label="Go to profile page" onClick={handleCloseMenu}>
               <MenuItem>Profile</MenuItem>
             </Link>
           )}
           {currentState.company.data && (
-            <Link to="/companies/profile" aria-label="Go to profile page" onClick={handleCloseMenu}>
+            <Link to={`/companies/profile/${currentState.company.data.id}`} aria-label="Go to profile page" onClick={handleCloseMenu}>
               <MenuItem>Profile</MenuItem>
             </Link>
           )}
