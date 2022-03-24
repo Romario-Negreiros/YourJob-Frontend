@@ -114,7 +114,11 @@ const CompanyProfile: React.FC = () => {
           )
           const body = await response.json()
           if (response.ok) {
-            setCompany(body.company as Company)
+            if (body.company.verifyEmailToken) {
+              setError('This company has not verified its email yet!')
+            } else {
+              setCompany(body.company as Company)
+            }
             return
           }
           throw new Error(body.error)

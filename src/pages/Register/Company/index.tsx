@@ -2,7 +2,7 @@ import React from 'react'
 
 import useStyles from '../../../styles/global'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { updateData, resetData, Inputs } from '../../../app/slices/companyRegisterForm'
+import { updateData, resetData } from '../../../app/slices/companyRegisterForm'
 import { storage } from '../../../lib/firebase'
 
 import Container from '@mui/material/Container'
@@ -64,19 +64,9 @@ const CompanyRegister: React.FC = () => {
       setIsLoaded(false)
       setError('')
       try {
-        const formDataCopy: Partial<Inputs> = JSON.parse(JSON.stringify(formData))
-        const storageRef = storage.ref(storage.storage, `companies/${formDataCopy.email}/logo`)
-        delete formDataCopy.confirmPassword
-        if (formData.companyLogo) {
-          await storage.uploadBytesResumable(
-            storageRef,
-            JSON.parse(formDataCopy.companyLogo as string)
-          )
-          formDataCopy.companyLogo = await storage.getDownloadURL(storageRef)
-        }
         const response = await fetch('https://yourjob-api.herokuapp.com/companies/register', {
           method: 'POST',
-          body: JSON.stringify(formDataCopy),
+          body: JSON.stringify(formData),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -88,6 +78,7 @@ const CompanyRegister: React.FC = () => {
           dispatch(resetData())
         } else {
           if (formData.companyLogo) {
+            const storageRef = storage.ref(storage.storage, `companies/${formData.email}/companyLogo`)
             await storage.deleteObject(storageRef)
           }
           if (body.error) {

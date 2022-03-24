@@ -2,7 +2,7 @@ import React from 'react'
 
 import useStyles from '../../../styles/global'
 import { useAppDispatch, useAppSelector } from '../../../app/hooks'
-import { updateData, resetData, Inputs } from '../../../app/slices/userRegisterForm'
+import { updateData, resetData } from '../../../app/slices/userRegisterForm'
 import { storage } from '../../../lib/firebase'
 
 import Container from '@mui/material/Container'
@@ -64,27 +64,9 @@ const UserRegister: React.FC = () => {
       setIsLoaded(false)
       setError('')
       try {
-        const formDataCopy: Partial<Inputs> = JSON.parse(JSON.stringify(formData))
-        delete formDataCopy.confirmPassword
-        if (formData.profilePicture) {
-          const storageRef = storage.ref(storage.storage, `users/${formData.email}/picture`)
-          await storage.uploadBytesResumable(
-            storageRef,
-            JSON.parse(formDataCopy.profilePicture as string)
-          )
-          formDataCopy.profilePicture = await storage.getDownloadURL(storageRef)
-        }
-        if (formData.curriculum) {
-          const storageRef = storage.ref(storage.storage, `users/${formData.email}/curriculum`)
-          await storage.uploadBytesResumable(
-            storageRef,
-            JSON.parse(formDataCopy.curriculum as string)
-          )
-          formDataCopy.curriculum = await storage.getDownloadURL(storageRef)
-        }
         const response = await fetch('https://yourjob-api.herokuapp.com/users/register', {
           method: 'POST',
-          body: JSON.stringify(formDataCopy),
+          body: JSON.stringify(formData),
           headers: {
             'Content-Type': 'application/json'
           }
@@ -97,7 +79,7 @@ const UserRegister: React.FC = () => {
         } else {
           if (formData.profilePicture) {
             await storage.deleteObject(
-              storage.ref(storage.storage, `users/${formData.email}/picture`)
+              storage.ref(storage.storage, `users/${formData.email}/profilePicture`)
             )
           }
           if (formData.curriculum) {

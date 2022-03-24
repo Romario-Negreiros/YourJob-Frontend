@@ -88,7 +88,11 @@ const UserProfile: React.FC = () => {
           )
           const body = await response.json()
           if (response.ok) {
-            setUser(body.user as User)
+            if (body.user.verifyEmailToken) {
+              setError('This user has not verified its email yet!')
+            } else {
+              setUser(body.user as User)
+            }
             return
           }
           throw new Error(body.error)
