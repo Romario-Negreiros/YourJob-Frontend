@@ -184,7 +184,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
             >
               Curriculum
             </Typography>
-            <Link href={user.curriculum || ''} variant="subtitle2" underline="always" download={user.curriculum && true}>
+            <Link href={user.curriculum || ''} variant="subtitle2" underline="always" target="_blank" download={user.curriculum && true}>
               {user.curriculum ? 'Download' : 'Nothing to see here...'}
             </Link>
             {isEditing && (
