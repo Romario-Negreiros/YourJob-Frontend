@@ -4,9 +4,10 @@ import useStyles from './styles'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/userRegisterForm'
-import convertFileObj from '../../utils/convertFileObj'
+import { storage } from '../../lib/firebase'
 
 import Grid from '@mui/material/Grid'
+import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -17,6 +18,7 @@ import { Props, Inputs } from './interfaces'
 
 const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
   const initialState = useAppSelector(state => state.userRegisterForm.data)
+  const [error, setError] = React.useState('')
   const dispatch = useAppDispatch()
   const classes = useStyles()
   const {
@@ -31,23 +33,54 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
     }
   })
 
-  const onSubmit: SubmitHandler<Inputs> = ({ bio, age, workingArea, profilePicture, curriculum }) => {
-    const stringifiedProfilePicture = convertFileObj(profilePicture[0])
-    const stringifiedCurriculum = convertFileObj(curriculum[0])
+  const onSubmit: SubmitHandler<Inputs> = async ({
+    bio,
+    age,
+    workingArea,
+    profilePicture,
+    curriculum
+  }) => {
+    try {
+      const ppRef = storage.ref(storage.storage, `users/${initialState?.email}/profilePicture`)
+      const cvRef = storage.ref(storage.storage, `users/${initialState?.email}/curriculum`)
+      let ppUrl = ''
+      let cvUrl = ''
+      if (profilePicture[0]) {
+        await storage.uploadBytesResumable(ppRef, profilePicture[0])
+        ppUrl = await storage.getDownloadURL(ppRef)
+      }
+      if (curriculum[0]) {
+        await storage.uploadBytesResumable(cvRef, curriculum[0])
+        cvUrl = await storage.getDownloadURL(cvRef)
+      }
 
-    dispatch(
-      updateData({
-        bio,
-        age,
-        workingArea,
-        profilePicture: stringifiedProfilePicture,
-        curriculum: stringifiedCurriculum
-      })
-    )
+      dispatch(
+        updateData({
+          bio,
+          age,
+          workingArea,
+          profilePicture: ppUrl || initialState?.profilePicture,
+          curriculum: cvUrl || initialState?.curriculum
+        })
+      )
 
-    handleNext()
+      handleNext()
+    } catch (err) {
+      setError('Something went wrong while saving your data, please try again!')
+    }
   }
 
+  if (error) {
+    return (
+      <Grid className={classes.grid}>
+        <Alert severity="error">{error}</Alert>
+        <br />
+        <Button variant="contained" color="error" onClick={() => setError('')}>
+          Dismiss
+        </Button>
+      </Grid>
+    )
+  }
   return (
     <Grid
       container

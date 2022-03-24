@@ -78,7 +78,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
             </Avatar>
               )
             : (
-            <Avatar sx={{ margin: 'auto' }} src={user.profilePicture ? user.profilePicture : ''}>
+            <Avatar sx={{ margin: 'auto' }} src={user.profilePicture || ''}>
               {user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
             </Avatar>
               )}
@@ -184,7 +184,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
             >
               Curriculum
             </Typography>
-            <Link href={user.curriculum ? user.curriculum : ''} variant="subtitle2" underline="always" download={user.curriculum && true}>
+            <Link href={user.curriculum || ''} variant="subtitle2" underline="always" download={user.curriculum && true}>
               {user.curriculum ? 'Download' : 'Nothing to see here...'}
             </Link>
             {isEditing && (

@@ -4,10 +4,10 @@ import useStyles from './styles'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppSelector, useAppDispatch } from '../../app/hooks'
 import { updateData } from '../../app/slices/companyRegisterForm'
-import { styled } from '@mui/material/styles'
-import convertFileObj from '../../utils/convertFileObj'
+import { storage } from '../../lib/firebase'
 
 import Grid from '@mui/material/Grid'
+import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -22,6 +22,7 @@ import { Props, Inputs, Country } from './interfaces'
 const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
   const [countries, setCountries] = React.useState<Array<Country>>([])
   const initialState = useAppSelector(state => state.companyRegisterForm.data)
+  const [error, setError] = React.useState('')
   const dispatch = useAppDispatch()
   const classes = useStyles()
   const {
@@ -37,33 +38,32 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
     }
   })
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
-    const stringifiedCompanyLogo = convertFileObj(data.companyLogo[0])
-    const country = countries.find(country => country.name.common === data.country)
-    if (initialState?.companyLogo && data.companyLogo === undefined) {
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    try {
+      const country = countries.find(country => country.name.common === data.country)
+      const clRef = storage.ref(storage.storage, `companies/${initialState?.email}/companyLogo`)
+      let clUrl = ''
+      if (data.companyLogo[0]) {
+        await storage.uploadBytesResumable(clRef, data.companyLogo[0])
+        clUrl = await storage.getDownloadURL(clRef)
+      }
+
       dispatch(
         updateData({
           ...data,
           alpha2Code: country?.cca2,
-          companyLogo: initialState.companyLogo
+          companyLogo: clUrl || initialState?.companyLogo
         })
       )
-      return
+      handleNext()
+    } catch (err) {
+      setError('Something went wrong while saving your data, please try again!')
     }
-    dispatch(updateData({ ...data, alpha2Code: country?.cca2, companyLogo: stringifiedCompanyLogo }))
-
-    handleNext()
   }
-
-  const Input = styled('input')({
-    display: 'none'
-  })
 
   React.useEffect(() => {
     ;(async () => {
-      const response = await fetch(
-        'https://restcountries.com/v3.1/all?fields=name,flags,cca2,idd'
-      )
+      const response = await fetch('https://restcountries.com/v3.1/all?fields=name,flags,cca2,idd')
       const countries: Array<Country> = await response.json()
 
       setCountries(countries)
@@ -77,6 +77,16 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
     return (
       <Grid className={classes.grid}>
         <CircularProgress color="secondary" />
+      </Grid>
+    )
+  } else if (error) {
+    return (
+      <Grid className={classes.grid}>
+        <Alert severity="error">{error}</Alert>
+        <br />
+        <Button variant="contained" color="error" onClick={() => setError('')}>
+          Dismiss
+        </Button>
       </Grid>
     )
   }
@@ -116,23 +126,23 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
               {option.name.common}
             </Box>
           )}
-          renderInput={(params) => (
+          renderInput={params => (
             <TextField
-            {...params}
-            {...register('country', {
-              required: {
-                value: true,
-                message: 'Country is required!'
-              },
-              value: initialState?.country
-            })}
-            label="Country"
-            sx={{ width: 240 }}
-            error={errors.country && true}
-            helperText={errors.country?.message}
-            inputProps={{
-              ...params.inputProps
-            }}
+              {...params}
+              {...register('country', {
+                required: {
+                  value: true,
+                  message: 'Country is required!'
+                },
+                value: initialState?.country
+              })}
+              label="Country"
+              sx={{ width: 240 }}
+              error={errors.country && true}
+              helperText={errors.country?.message}
+              inputProps={{
+                ...params.inputProps
+              }}
             />
           )}
         />
@@ -169,10 +179,12 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
       <Grid item sx={{ textAlign: 'center' }} xs={12}>
         <label htmlFor="company-logo" style={{ display: 'inline-block', width: 240 }}>
           <Typography variant="body2">Logo</Typography>
-          <Input
+          <TextField
             {...register('companyLogo')}
             type="file"
-            accept="image/*"
+            inputProps={{
+              accept: 'image/*'
+            }}
             id="company-logo"
             sx={{ display: 'none' }}
           />
