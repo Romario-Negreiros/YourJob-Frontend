@@ -23,6 +23,7 @@ const Layout: React.FC = () => {
       <div style={{ margin: 8 }}>
         <Outlet />
       </div>
+      <div className={classes.toolbar}></div>
     </>
   )
 }
