@@ -66,7 +66,7 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
 
       handleNext()
     } catch (err) {
-      setError(`${err.message} \n ${err}`)
+      setError(err)
     }
   }
 
