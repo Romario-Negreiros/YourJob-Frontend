@@ -90,17 +90,15 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
             id={isEditing ? 'profile-picture' : 'inative'}
             sx={{ display: 'none' }}
           />
-          {isEditing
-            ? (
+          {isEditing ? (
             <Avatar sx={{ margin: 'auto', cursor: 'pointer' }}>
               <UploadIcon />
             </Avatar>
-              )
-            : (
+          ) : (
             <Avatar sx={{ margin: 'auto' }} src={user.profilePicture || ''}>
               {user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
             </Avatar>
-              )}
+          )}
         </label>
       </Grid>
       <Grid item xs={12} md={6}>

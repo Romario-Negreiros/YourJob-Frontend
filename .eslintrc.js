@@ -15,7 +15,7 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'no-use-before-define': 'off',
-    'multiline-ternary': 'never',
+    'multiline-ternary': ['error', 'never'],
     '@typescript-eslint/no-use-before-define': ['error']
   }
 }
