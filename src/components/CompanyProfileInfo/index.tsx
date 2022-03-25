@@ -80,17 +80,15 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             id={isEditing ? 'company-logo' : 'inative'}
             sx={{ display: 'none' }}
           />
-          {isEditing
-            ? (
+          {isEditing ? (
             <Avatar sx={{ margin: 'auto', cursor: 'pointer' }}>
               <UploadIcon />
             </Avatar>
-              )
-            : (
+          ) : (
             <Avatar sx={{ margin: 'auto' }} src={company.companyLogo || ''}>
               {company.companyLogo ? '' : company.name.charAt(0).toUpperCase()}
             </Avatar>
-              )}
+          )}
         </label>
       </Grid>
       <Grid item xs={12} md={6}>

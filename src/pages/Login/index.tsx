@@ -102,12 +102,7 @@ const Login: React.FC = () => {
   return (
     <Container className={classes.container}>
       <Paper className={classes.paper}>
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit(onSubmit)}
-          className={classes.form}
-        >
+        <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)} className={classes.form}>
           <Typography
             variant="h3"
             component="div"
@@ -130,14 +125,16 @@ const Login: React.FC = () => {
               sx={{ width: 240, mt: 3 }}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end" sx={{ cursor: 'pointer' }} onClick={handleVisibility}>
-                    {isVisible
-                      ? (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={handleVisibility}
+                  >
+                    {isVisible ? (
                       <VisibilityOffIcon color="secondary" />
-                        )
-                      : (
+                    ) : (
                       <VisibilityIcon color="secondary" />
-                        )}
+                    )}
                   </InputAdornment>
                 )
               }}
