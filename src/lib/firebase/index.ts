@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getStorage, ref, uploadBytesResumable, deleteObject, getDownloadURL } from 'firebase/storage'
+import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from 'firebase/storage'
 
 const firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
@@ -16,7 +16,7 @@ const app = initializeApp(firebaseConfig)
 export const storage = {
   storage: getStorage(app),
   ref,
-  uploadBytesResumable,
+  uploadBytes,
   deleteObject,
   getDownloadURL
 }
