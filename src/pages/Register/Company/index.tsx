@@ -53,10 +53,18 @@ const CompanyRegister: React.FC = () => {
 
   const handleBack = () => setActiveStep(activeStep - 1)
 
-  const handleReset = () => {
-    dispatch(resetData())
+  const handleReset = async () => {
+    try {
+      if (formData?.companyLogo) {
+        const storageRef = storage.ref(storage.storage, `companies/${formData?.email}/companyLogo`)
+        await storage.deleteObject(storageRef)
+      }
+      dispatch(resetData())
 
-    setActiveStep(0)
+      setActiveStep(0)
+    } catch (err) {
+      setError('Error while cleaning data!')
+    }
   }
 
   const submitNewCompany = async () => {
@@ -78,7 +86,10 @@ const CompanyRegister: React.FC = () => {
           dispatch(resetData())
         } else {
           if (formData.companyLogo) {
-            const storageRef = storage.ref(storage.storage, `companies/${formData.email}/companyLogo`)
+            const storageRef = storage.ref(
+              storage.storage,
+              `companies/${formData.email}/companyLogo`
+            )
             await storage.deleteObject(storageRef)
           }
           if (body.error) {
@@ -129,8 +140,7 @@ const CompanyRegister: React.FC = () => {
             </Stepper>
           </Box>
           <Box sx={{ textAlign: 'center', width: '100%', mt: 4, mb: 4 }}>
-            {activeStep === steps.length
-              ? (
+            {activeStep === steps.length ? (
               <>
                 <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>
                   All steps completed - you&apos;re finished
@@ -149,10 +159,9 @@ const CompanyRegister: React.FC = () => {
                   </Typography>
                 )}
               </>
-                )
-              : (
+            ) : (
               <>{steps[activeStep].renderComponent(handleNext)}</>
-                )}
+            )}
           </Box>
           <Box className={classes.buttonsWrapper}>
             <Button

@@ -63,7 +63,11 @@ const Header: React.FC = () => {
         </Box>
         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>
           {menuItems.map(item => (
-            <Tooltip key={item.text} title={item.text} placement={item.text === 'Home' ? 'bottom-start' : 'bottom'}>
+            <Tooltip
+              key={item.text}
+              title={item.text}
+              placement={item.text === 'Home' ? 'bottom-start' : 'bottom'}
+            >
               <Link to={item.url} aria-label={item.ariaLabel}>
                 <IconButton size="large" edge="end">
                   {item.icon}
@@ -82,22 +86,23 @@ const Header: React.FC = () => {
           )}
           {currentState.company.data && (
             <Tooltip title="Profile" placement="bottom-start">
-              <Link to={`/companies/profile/${currentState.company.data.id}`} aria-label="Go to profile page">
+              <Link
+                to={`/companies/profile/${currentState.company.data.id}`}
+                aria-label="Go to profile page"
+              >
                 <IconButton size="large" edge="end">
                   <AccountIcon />
                 </IconButton>
               </Link>
             </Tooltip>
           )}
-          {currentState.user.data || currentState.company.data
-            ? (
+          {currentState.user.data || currentState.company.data ? (
             <Tooltip title="Log out" placement="bottom-start">
               <IconButton size="large" edge="end" onClick={handleLogout}>
                 <LogoutRoundedIcon />
               </IconButton>
             </Tooltip>
-              )
-            : (
+          ) : (
             <Tooltip title="Log in" placement="bottom-start">
               <Link to="/login" aria-label="Go to login page">
                 <IconButton size="large" edge="end">
@@ -105,7 +110,7 @@ const Header: React.FC = () => {
                 </IconButton>
               </Link>
             </Tooltip>
-              )}
+          )}
         </Box>
         <Menu
           id="mobile-menu"
@@ -128,17 +133,24 @@ const Header: React.FC = () => {
             </Link>
           ))}
           {currentState.user.data && (
-            <Link to={`/profile/${currentState.user.data.id}`} aria-label="Go to profile page" onClick={handleCloseMenu}>
+            <Link
+              to={`/profile/${currentState.user.data.id}`}
+              aria-label="Go to profile page"
+              onClick={handleCloseMenu}
+            >
               <MenuItem>Profile</MenuItem>
             </Link>
           )}
           {currentState.company.data && (
-            <Link to={`/companies/profile/${currentState.company.data.id}`} aria-label="Go to profile page" onClick={handleCloseMenu}>
+            <Link
+              to={`/companies/profile/${currentState.company.data.id}`}
+              aria-label="Go to profile page"
+              onClick={handleCloseMenu}
+            >
               <MenuItem>Profile</MenuItem>
             </Link>
           )}
-          {currentState.user.data || currentState.company.data
-            ? (
+          {currentState.user.data || currentState.company.data ? (
             <MenuItem
               aria-label="Log out"
               onClick={() => {
@@ -148,12 +160,11 @@ const Header: React.FC = () => {
             >
               Log out
             </MenuItem>
-              )
-            : (
+          ) : (
             <Link to="/login" aria-label="Go to login page" onClick={handleCloseMenu}>
               <MenuItem>Log in</MenuItem>
             </Link>
-              )}
+          )}
         </Menu>
       </Toolbar>
     </AppBar>

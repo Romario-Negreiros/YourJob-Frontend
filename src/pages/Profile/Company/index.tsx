@@ -134,9 +134,7 @@ const CompanyProfile: React.FC = () => {
           }
           throw new Error(body.error)
         } catch (err) {
-          err instanceof Error
-            ? setError(err.message)
-            : setError("Unable to load company's profile!")
+          err instanceof Error ? setError(err.message) : setError("Unable to load company's profile!")
         } finally {
           setIsLoaded(true)
         }
@@ -148,14 +146,17 @@ const CompanyProfile: React.FC = () => {
       if (jwt && company) {
         ;(async () => {
           try {
-            const response = await fetch(`https://yourjob-api.herokuapp.com/companies/profile/${company.id}/update`, {
-              method: 'POST',
-              body: JSON.stringify(company),
-              headers: new Headers({
-                'Content-Type': 'application/json',
-                authorization: jwt
-              })
-            })
+            const response = await fetch(
+              `https://yourjob-api.herokuapp.com/companies/profile/${company.id}/update`,
+              {
+                method: 'POST',
+                body: JSON.stringify(company),
+                headers: new Headers({
+                  'Content-Type': 'application/json',
+                  authorization: jwt
+                })
+              }
+            )
             const body = await response.json()
             if (response.ok) {
               if (company.id === currentCompany?.id) {
