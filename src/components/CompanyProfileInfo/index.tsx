@@ -1,113 +1,217 @@
 import React from 'react'
 
 import useStyles from '../../styles/global'
+import { storage } from '../../lib/firebase'
+import { useForm, SubmitHandler } from 'react-hook-form'
 
 import Grid from '@mui/material/Grid'
+import Alert from '@mui/material/Alert'
 import Avatar from '@mui/material/Avatar'
+import TextField from '@mui/material/TextField'
 import Paper from '@mui/material/Paper'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
-import Link from '@mui/material/Link'
+
+import UploadIcon from '@mui/icons-material/UploadFileRounded'
 
 import { Company } from '../../app/slices/company/interfaces'
+import { Props, Inputs } from './interfaces'
 
-interface Props {
-  company: Company
-}
-
-const CompanyProfileInfo: React.FC<Props> = ({ company }) => {
+const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCompany }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<Inputs>({
+    defaultValues: {
+      description: company.description,
+      contactNumber: company.contactNumber,
+      website: company.website
+    }
+  })
+  const [error, setError] = React.useState('')
+  const [isEditing, setIsEditing] = React.useState(false)
   const classes = useStyles()
 
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    try {
+      const companyCopy: Company = JSON.parse(JSON.stringify(company))
+      if (data.companyLogo[0]) {
+        const storageRef = storage.ref(storage.storage, `companies/${company.email}/companyLogo`)
+        await storage.uploadBytes(storageRef, data.companyLogo[0])
+        companyCopy.companyLogo = await storage.getDownloadURL(storageRef)
+      }
+      const dataCopy: Partial<Company> = JSON.parse(JSON.stringify(data))
+      delete dataCopy.companyLogo
+
+      setCompany({ ...companyCopy, ...dataCopy })
+      setIsEditing(false)
+    } catch (err) {
+      setError('Unable to update information!')
+    }
+  }
+
+  if (error) {
+    return (
+      <Grid>
+        <Alert severity="error">{error}</Alert>
+        <br />
+        <Button variant="contained" color="error" onClick={() => setError('')}>
+          Dismiss
+        </Button>
+      </Grid>
+    )
+  }
   return (
-    <Grid container spacing={4}>
+    <Grid
+      container
+      spacing={4}
+      component={isEditing ? 'form' : 'div'}
+      onSubmit={handleSubmit(onSubmit)}
+      autoComplete="off"
+    >
       <Grid item xs={12}>
-        <Avatar sx={{ margin: 'auto' }}>C</Avatar>
+        <label htmlFor="company-logo">
+          <TextField
+            {...register('companyLogo')}
+            type="file"
+            inputProps={{
+              accept: 'image/*'
+            }}
+            id={isEditing ? 'company-logo' : 'inative'}
+            sx={{ display: 'none' }}
+          />
+          {isEditing
+            ? (
+            <Avatar sx={{ margin: 'auto', cursor: 'pointer' }}>
+              <UploadIcon />
+            </Avatar>
+              )
+            : (
+            <Avatar sx={{ margin: 'auto' }} src={company.companyLogo || ''}>
+              {company.companyLogo ? '' : company.name.charAt(0).toUpperCase()}
+            </Avatar>
+              )}
+        </label>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Name
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              company.name
-            </Typography>
-          </Box>
-          <Button variant="contained">Change</Button>
+          <TextField
+            label="Name"
+            variant="standard"
+            defaultValue={company.name}
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+          />
         </Paper>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Password
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              secret :)
-            </Typography>
-          </Box>
-          <Button variant="contained">Change</Button>
+          <TextField
+            label="Email"
+            variant="standard"
+            fullWidth
+            defaultValue={company.email}
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+          />
         </Paper>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Description
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              company.description
-            </Typography>
-          </Box>
-          <Button variant="contained">Change</Button>
+          <TextField
+            label="Description"
+            {...register('description', {
+              required: 'Description is required!'
+            })}
+            variant="standard"
+            fullWidth
+            defaultValue={company.description}
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+          />
         </Paper>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Phone number
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              +55 (47)987654321
-            </Typography>
-          </Box>
-          <Box>
-            <Button variant="contained">Change</Button>
-          </Box>
+          <TextField
+            label="Contact Number"
+            {...register('contactNumber', {
+              required: 'Contact number is required!'
+            })}
+            variant="standard"
+            fullWidth
+            defaultValue={company.contactNumber}
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+          />
         </Paper>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Region
-            </Typography>
-            <Typography variant="body1" component="div" sx={{ mt: 2 }}>
-              company.region
-            </Typography>
-          </Box>
-          <Box>
-            <Button variant="contained">Change</Button>
-          </Box>
+          <TextField
+            label="Country"
+            variant="standard"
+            fullWidth
+            defaultValue={company.country}
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+          />
         </Paper>
       </Grid>
       <Grid item xs={12} md={6}>
         <Paper elevation={8} className={classes.infoCompPaper}>
-          <Box>
-            <Typography variant="h6" component="div">
-              Website
-            </Typography>
-            <Link href="#" variant="body1" underline="always" download sx={{ display: 'inline-block', mt: 2 }}>
-                www.companyname.com
-            </Link>
-          </Box>
-          <Box>
-            <Button variant="contained">Change</Button>
-          </Box>
+          <TextField
+            label="Website"
+            {...register('website', {
+              required: 'Website is required'
+            })}
+            variant="standard"
+            fullWidth
+            InputProps={{
+              readOnly: true,
+              disableUnderline: true
+            }}
+            error={errors.website && true}
+            helperText={errors.website?.message}
+          />
         </Paper>
       </Grid>
+      {isCurrentCompany && (
+        <>
+          <Grid item xs={12} md={6}>
+            <Button
+              variant="contained"
+              type={isEditing ? 'submit' : 'button'}
+              onClick={() => {
+                if (!isEditing) setIsEditing(true)
+              }}
+              color={isEditing ? 'success' : 'secondary'}
+            >
+              {isEditing ? 'Save' : 'Change'}
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Button
+              variant="contained"
+              color="error"
+              disabled={!isEditing}
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+          </Grid>
+        </>
+      )}
     </Grid>
   )
 }

@@ -44,7 +44,7 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
       const clRef = storage.ref(storage.storage, `companies/${initialState?.email}/companyLogo`)
       let clUrl = ''
       if (data.companyLogo[0]) {
-        await storage.uploadBytesResumable(clRef, data.companyLogo[0])
+        await storage.uploadBytes(clRef, data.companyLogo[0])
         clUrl = await storage.getDownloadURL(clRef)
       }
 

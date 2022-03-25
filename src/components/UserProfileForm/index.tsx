@@ -46,11 +46,11 @@ const UserProfileForm: React.FC<Props> = ({ handleNext }) => {
       let ppUrl = ''
       let cvUrl = ''
       if (profilePicture[0]) {
-        await storage.uploadBytesResumable(ppRef, profilePicture[0])
+        await storage.uploadBytes(ppRef, profilePicture[0])
         ppUrl = await storage.getDownloadURL(ppRef)
       }
       if (curriculum[0]) {
-        await storage.uploadBytesResumable(cvRef, curriculum[0])
+        await storage.uploadBytes(cvRef, curriculum[0])
         cvUrl = await storage.getDownloadURL(cvRef)
       }
 
