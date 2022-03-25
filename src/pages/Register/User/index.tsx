@@ -67,9 +67,9 @@ const UserRegister: React.FC = () => {
         const response = await fetch('https://yourjob-api.herokuapp.com/users/register', {
           method: 'POST',
           body: JSON.stringify(formData),
-          headers: {
+          headers: new Headers({
             'Content-Type': 'application/json'
-          }
+          })
         })
         const body = await response.json()
         if (response.ok) {

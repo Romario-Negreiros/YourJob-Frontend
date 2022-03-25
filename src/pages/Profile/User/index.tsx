@@ -2,7 +2,8 @@ import React from 'react'
 
 import useStyles from '../styles'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useAppSelector } from '../../../app/hooks'
+import { useAppSelector, useAppDispatch } from '../../../app/hooks'
+import { updateUser } from '../../../app/slices/user'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -54,6 +55,7 @@ const UserProfile: React.FC = () => {
   const params = useParams()
   const navigate = useNavigate()
   const classes = useStyles()
+  const dispatch = useAppDispatch()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
@@ -81,9 +83,9 @@ const UserProfile: React.FC = () => {
           const response = await fetch(
             `https://yourjob-api.herokuapp.com/users/profile/${params.id}`,
             {
-              headers: {
+              headers: new Headers({
                 'Content-Type': 'application/json'
-              }
+              })
             }
           )
           const body = await response.json()
@@ -102,6 +104,34 @@ const UserProfile: React.FC = () => {
           setIsLoaded(true)
         }
       })()
+    }
+
+    return () => {
+      const jwt = localStorage.getItem('jwt')
+      if (jwt && user) {
+        (async () => {
+          try {
+            const response = await fetch(`https://yourjob-api.herokuapp.com/users/profile/${user.id}/update`, {
+              method: 'PUT',
+              body: JSON.stringify(user),
+              headers: new Headers({
+                'Content-Type': 'application/json',
+                authorization: jwt
+              })
+            })
+            const body = await response.json()
+            if (response.ok) {
+              if (user.id === currentUser?.id) {
+                dispatch(updateUser(body.user))
+              }
+              return
+            }
+            throw new Error(body.error)
+          } catch (err) {
+            // ??????????????
+          }
+        })()
+      }
     }
   }, [])
 

@@ -56,13 +56,13 @@ const Login: React.FC = () => {
       const response = await fetch(`https://yourjob-api.herokuapp.com/${loginMode}/authenticate`, {
         method: 'POST',
         body: JSON.stringify(data),
-        headers: {
+        headers: new Headers({
           'Content-Type': 'application/json'
-        }
+        })
       })
       const body = await response.json()
       if (response.ok) {
-        localStorage.setItem('jwt', body.token)
+        localStorage.setItem('jwt', `Bearer ${body.token}`)
         if (body.user) {
           dispatch(setUser(body.user))
           navigate(`/profile/${body.user.id}`)
@@ -128,6 +128,7 @@ const Login: React.FC = () => {
             <br />
             <TextField
               label="Password"
+              autoComplete="current-password"
               sx={{ width: 240, mt: 3 }}
               InputProps={{
                 endAdornment: (

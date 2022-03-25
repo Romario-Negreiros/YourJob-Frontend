@@ -1,7 +1,8 @@
 import React from 'react'
 
 import useStyles from '../styles'
-import { useAppSelector } from '../../../app/hooks'
+import { useAppSelector, useAppDispatch } from '../../../app/hooks'
+import { updateCompany } from '../../../app/slices/company'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
@@ -31,8 +32,17 @@ const initialListItems: CompanyItem[] = [
   {
     text: 'Profile Info',
     icon: <BusinessIcon color="primary" />,
-    renderComponent: (company: Company) => (
-      <CompanyProfileInfo key="proflieInfo" company={company} />
+    renderComponent: (
+      company: Company,
+      setCompany: (company: Company | null) => void,
+      isCurrentCompany?: boolean
+    ) => (
+      <CompanyProfileInfo
+        key="proflieInfo"
+        company={company}
+        setCompany={setCompany}
+        isCurrentCompany={isCurrentCompany}
+      />
     ),
     active: true
   },
@@ -77,6 +87,7 @@ const CompanyProfile: React.FC = () => {
   const currentCompany = useAppSelector(state => state.company.data)
   const params = useParams()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
   const classes = useStyles()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
@@ -102,14 +113,14 @@ const CompanyProfile: React.FC = () => {
       setCompany(currentCompany)
       setIsLoaded(true)
     } else {
-      (async () => {
+      ;(async () => {
         try {
           const response = await fetch(
             `https://yourjob-api.herokuapp.com/companies/profile/${params.id}`,
             {
-              headers: {
+              headers: new Headers({
                 'Content-Type': 'application/json'
-              }
+              })
             }
           )
           const body = await response.json()
@@ -130,6 +141,34 @@ const CompanyProfile: React.FC = () => {
           setIsLoaded(true)
         }
       })()
+    }
+
+    return () => {
+      const jwt = localStorage.getItem('jwt')
+      if (jwt && company) {
+        ;(async () => {
+          try {
+            const response = await fetch(`https://yourjob-api.herokuapp.com/companies/profile/${company.id}/update`, {
+              method: 'POST',
+              body: JSON.stringify(company),
+              headers: new Headers({
+                'Content-Type': 'application/json',
+                authorization: jwt
+              })
+            })
+            const body = await response.json()
+            if (response.ok) {
+              if (company.id === currentCompany?.id) {
+                dispatch(updateCompany(body.company))
+              }
+              return
+            }
+            throw new Error(body.error)
+          } catch (err) {
+            // ????????????????
+          }
+        })()
+      }
     }
   }, [])
 
