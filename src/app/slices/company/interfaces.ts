@@ -4,7 +4,7 @@ export interface Company {
   email: string;
   description: string;
   country: string;
-  contactNumber: string;
+  contactNumber: number;
   alpha2Code: string;
   website: string;
   companyLogo: string;
