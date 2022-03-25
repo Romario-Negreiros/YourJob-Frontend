@@ -105,7 +105,6 @@ const Login: React.FC = () => {
         <Box
           component="form"
           noValidate
-          autoComplete="off"
           onSubmit={handleSubmit(onSubmit)}
           className={classes.form}
         >
@@ -128,7 +127,6 @@ const Login: React.FC = () => {
             <br />
             <TextField
               label="Password"
-              autoComplete="current-password"
               sx={{ width: 240, mt: 3 }}
               InputProps={{
                 endAdornment: (
