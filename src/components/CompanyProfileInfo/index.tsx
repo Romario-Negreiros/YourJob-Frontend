@@ -1,11 +1,14 @@
 import React from 'react'
 
+import update from '../../utils/Update'
 import useStyles from '../../styles/global'
 import { storage } from '../../lib/firebase'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useAppDispatch } from '../../app/hooks'
 
 import Grid from '@mui/material/Grid'
 import Alert from '@mui/material/Alert'
+import CircularProgress from '@mui/material/CircularProgress'
 import Avatar from '@mui/material/Avatar'
 import TextField from '@mui/material/TextField'
 import Paper from '@mui/material/Paper'
@@ -29,8 +32,11 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
     }
   })
   const [error, setError] = React.useState('')
+  const [isLoaded, setIsLoaded] = React.useState(true)
   const [isEditing, setIsEditing] = React.useState(false)
   const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const controller = React.useMemo(() => new AbortController(), [])
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -43,16 +49,27 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
       const dataCopy: Partial<Company> = JSON.parse(JSON.stringify(data))
       delete dataCopy.companyLogo
 
-      setCompany({ ...companyCopy, ...dataCopy })
+      const updatedCompany: Company = { ...companyCopy, ...dataCopy }
+      await update.company(updatedCompany, dispatch, controller)
+
+      setCompany(updatedCompany)
       setIsEditing(false)
     } catch (err) {
-      setError('Unable to update information!')
+      err instanceof Error ? setError(err.message) : setError('Unable to update information!')
+    } finally {
+      setIsLoaded(true)
     }
   }
 
-  if (error) {
+  if (!isLoaded) {
     return (
-      <Grid>
+      <Grid sx={{ display: 'grid', placeItems: 'center' }}>
+        <CircularProgress color="secondary" />
+      </Grid>
+    )
+  } else if (error) {
+    return (
+      <Grid sx={{ display: 'grid', placeItems: 'center' }}>
         <Alert severity="error">{error}</Alert>
         <br />
         <Button variant="contained" color="error" onClick={() => setError('')}>

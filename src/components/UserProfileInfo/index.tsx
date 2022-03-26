@@ -1,13 +1,16 @@
 import React from 'react'
 
+import update from '../../utils/Update'
 import useStyles from '../../styles/global'
 import { storage } from '../../lib/firebase'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useAppDispatch } from '../../app/hooks'
 
 import Grid from '@mui/material/Grid'
 import Alert from '@mui/material/Alert'
 import Avatar from '@mui/material/Avatar'
 import TextField from '@mui/material/TextField'
+import CircularProgress from '@mui/material/CircularProgress'
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -33,11 +36,15 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
     }
   })
   const [error, setError] = React.useState('')
+  const [isLoaded, setIsLoaded] = React.useState(true)
   const [isEditing, setIsEditing] = React.useState(false)
   const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const controller = React.useMemo(() => new AbortController(), [])
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
+      setIsLoaded(false)
       const userCopy: User = JSON.parse(JSON.stringify(user))
       if (data.profilePicture[0]) {
         const storageRef = storage.ref(storage.storage, `users/${user.email}/profilePicture`)
@@ -53,14 +60,25 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
       delete dataCopy.profilePicture
       delete dataCopy.curriculum
 
-      setUser({ ...userCopy, ...dataCopy })
+      const updatedUser: User = { ...userCopy, ...dataCopy }
+      await update.user(updatedUser, dispatch, controller)
+
+      setUser(updatedUser)
       setIsEditing(false)
     } catch (err) {
-      setError('Unable to update information!')
+      err instanceof Error ? setError(err.message) : setError('Unable to update information!')
+    } finally {
+      setIsLoaded(true)
     }
   }
 
-  if (error) {
+  if (!isLoaded) {
+    return (
+      <Grid sx={{ display: 'grid', placeItems: 'center' }}>
+        <CircularProgress color="secondary" />
+      </Grid>
+    )
+  } else if (error) {
     return (
       <Grid sx={{ display: 'grid', placeItems: 'center' }}>
         <Alert severity="error">{error}</Alert>
