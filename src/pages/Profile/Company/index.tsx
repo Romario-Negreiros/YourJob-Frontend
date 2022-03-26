@@ -1,8 +1,7 @@
 import React from 'react'
 
 import useStyles from '../styles'
-import { useAppSelector, useAppDispatch } from '../../../app/hooks'
-import { updateCompany } from '../../../app/slices/company'
+import { useAppSelector } from '../../../app/hooks'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import Box from '@mui/material/Box'
@@ -87,7 +86,6 @@ const CompanyProfile: React.FC = () => {
   const currentCompany = useAppSelector(state => state.company.data)
   const params = useParams()
   const navigate = useNavigate()
-  const dispatch = useAppDispatch()
   const classes = useStyles()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
@@ -105,6 +103,7 @@ const CompanyProfile: React.FC = () => {
   }
 
   React.useEffect(() => {
+    const controller = new AbortController()
     if (!params.id?.match(/^\d*$/)) {
       setError('Invalid company id!')
       setIsLoaded(true)
@@ -141,36 +140,7 @@ const CompanyProfile: React.FC = () => {
       })()
     }
 
-    return () => {
-      const jwt = localStorage.getItem('jwt')
-      if (jwt && company) {
-        ;(async () => {
-          try {
-            const response = await fetch(
-              `https://yourjob-api.herokuapp.com/companies/profile/${company.id}/update`,
-              {
-                method: 'POST',
-                body: JSON.stringify(company),
-                headers: new Headers({
-                  'Content-Type': 'application/json',
-                  authorization: jwt
-                })
-              }
-            )
-            const body = await response.json()
-            if (response.ok) {
-              if (company.id === currentCompany?.id) {
-                dispatch(updateCompany(body.company))
-              }
-              return
-            }
-            throw new Error(body.error)
-          } catch (err) {
-            // ????????????????
-          }
-        })()
-      }
-    }
+    return () => controller.abort()
   }, [])
 
   if (!isLoaded) {

@@ -2,8 +2,7 @@ import React from 'react'
 
 import useStyles from '../styles'
 import { useParams, useNavigate } from 'react-router-dom'
-import { useAppSelector, useAppDispatch } from '../../../app/hooks'
-import { updateUser } from '../../../app/slices/user'
+import { useAppSelector } from '../../../app/hooks'
 
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -55,7 +54,6 @@ const UserProfile: React.FC = () => {
   const params = useParams()
   const navigate = useNavigate()
   const classes = useStyles()
-  const dispatch = useAppDispatch()
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
@@ -71,6 +69,7 @@ const UserProfile: React.FC = () => {
   }
 
   React.useEffect(() => {
+    const controller = new AbortController()
     if (!params.id?.match(/^\d*$/)) {
       setError('Invalid user id!')
       setIsLoaded(true)
@@ -78,11 +77,12 @@ const UserProfile: React.FC = () => {
       setUser(currentUser)
       setIsLoaded(true)
     } else {
-      (async () => {
+      ;(async () => {
         try {
           const response = await fetch(
             `https://yourjob-api.herokuapp.com/users/profile/${params.id}`,
             {
+              signal: controller.signal,
               headers: new Headers({
                 'Content-Type': 'application/json'
               })
@@ -106,33 +106,7 @@ const UserProfile: React.FC = () => {
       })()
     }
 
-    return () => {
-      const jwt = localStorage.getItem('jwt')
-      if (jwt && user) {
-        (async () => {
-          try {
-            const response = await fetch(`https://yourjob-api.herokuapp.com/users/profile/${user.id}/update`, {
-              method: 'PUT',
-              body: JSON.stringify(user),
-              headers: new Headers({
-                'Content-Type': 'application/json',
-                authorization: jwt
-              })
-            })
-            const body = await response.json()
-            if (response.ok) {
-              if (user.id === currentUser?.id) {
-                dispatch(updateUser(body.user))
-              }
-              return
-            }
-            throw new Error(body.error)
-          } catch (err) {
-            // ??????????????
-          }
-        })()
-      }
-    }
+    return () => controller.abort()
   }, [])
 
   if (!isLoaded) {
