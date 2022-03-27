@@ -40,6 +40,7 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
+      setIsLoaded(false)
       const companyCopy: Company = JSON.parse(JSON.stringify(company))
       if (data.companyLogo[0]) {
         const storageRef = storage.ref(storage.storage, `companies/${company.email}/companyLogo`)
@@ -142,12 +143,13 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             {...register('description', {
               required: 'Description is required!'
             })}
-            variant="standard"
             fullWidth
+            variant="standard"
+            multiline
             defaultValue={company.description}
             InputProps={{
-              readOnly: true,
-              disableUnderline: true
+              readOnly: !isEditing,
+              disableUnderline: !isEditing
             }}
           />
         </Paper>
@@ -163,8 +165,8 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             fullWidth
             defaultValue={company.contactNumber}
             InputProps={{
-              readOnly: true,
-              disableUnderline: true
+              readOnly: !isEditing,
+              disableUnderline: !isEditing
             }}
           />
         </Paper>
@@ -193,8 +195,8 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             variant="standard"
             fullWidth
             InputProps={{
-              readOnly: true,
-              disableUnderline: true
+              readOnly: !isEditing,
+              disableUnderline: !isEditing
             }}
             error={errors.website && true}
             helperText={errors.website?.message}
