@@ -2,7 +2,7 @@ import React from 'react'
 
 import update from '../../utils/Update'
 import useStyles from '../../styles/global'
-import { storage } from '../../lib/firebase'
+import updateData from './functions/updateData'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch } from '../../app/hooks'
 
@@ -16,7 +16,6 @@ import Button from '@mui/material/Button'
 
 import UploadIcon from '@mui/icons-material/UploadFileRounded'
 
-import { Company } from '../../app/slices/company/interfaces'
 import { Props, Inputs } from './interfaces'
 
 const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCompany }) => {
@@ -41,16 +40,7 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
-      const companyCopy: Company = JSON.parse(JSON.stringify(company))
-      if (data.companyLogo[0]) {
-        const storageRef = storage.ref(storage.storage, `companies/${company.email}/companyLogo`)
-        await storage.uploadBytes(storageRef, data.companyLogo[0])
-        companyCopy.companyLogo = await storage.getDownloadURL(storageRef)
-      }
-      const dataCopy: Partial<Company> = JSON.parse(JSON.stringify(data))
-      delete dataCopy.companyLogo
-
-      const updatedCompany: Company = { ...companyCopy, ...dataCopy }
+      const updatedCompany = await updateData(company, data)
       await update.company(updatedCompany, dispatch, controller)
 
       setCompany(updatedCompany)

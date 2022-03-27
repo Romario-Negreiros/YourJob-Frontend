@@ -2,7 +2,6 @@ import React from 'react'
 
 import update from '../../utils/Update'
 import useStyles from '../../styles/global'
-import { storage } from '../../lib/firebase'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppDispatch } from '../../app/hooks'
 
@@ -20,8 +19,8 @@ import IconButton from '@mui/material/IconButton'
 
 import UploadIcon from '@mui/icons-material/UploadFileRounded'
 
-import { User } from '../../app/slices/user/interfaces'
 import { Props, Inputs } from './interfaces'
+import updateData from './functions/updateData'
 
 const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
   const {
@@ -45,22 +44,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
-      const userCopy: User = JSON.parse(JSON.stringify(user))
-      if (data.profilePicture[0]) {
-        const storageRef = storage.ref(storage.storage, `users/${user.email}/profilePicture`)
-        await storage.uploadBytes(storageRef, data.profilePicture[0])
-        userCopy.profilePicture = await storage.getDownloadURL(storageRef)
-      }
-      if (data.curriculum[0]) {
-        const storageRef = storage.ref(storage.storage, `users/${user.email}/curriculum`)
-        await storage.uploadBytes(storageRef, data.curriculum[0])
-        userCopy.curriculum = await storage.getDownloadURL(storageRef)
-      }
-      const dataCopy: Partial<User> = JSON.parse(JSON.stringify(data))
-      delete dataCopy.profilePicture
-      delete dataCopy.curriculum
-
-      const updatedUser: User = { ...userCopy, ...dataCopy }
+      const updatedUser = await updateData(user, data)
       await update.user(updatedUser, dispatch, controller)
 
       setUser(updatedUser)
