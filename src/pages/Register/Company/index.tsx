@@ -74,7 +74,7 @@ const CompanyRegister: React.FC = () => {
       try {
         const response = await fetch('https://yourjob-api.herokuapp.com/companies/register', {
           method: 'POST',
-          body: JSON.stringify(formData),
+          body: JSON.stringify({ ...formData, contactNumber: String(formData.contactNumber) }),
           headers: new Headers({
             'Content-Type': 'application/json'
           })

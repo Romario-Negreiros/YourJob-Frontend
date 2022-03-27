@@ -214,6 +214,9 @@ const CompanyProfile: React.FC = () => {
         <Grid item xs={12}>
           {listItems.map(item => {
             if (item.active) {
+              if (company?.id === currentCompany?.id) {
+                return item.renderComponent(company as Company, setCompany, true)
+              }
               return item.renderComponent(company as Company)
             } else return null
           })}
