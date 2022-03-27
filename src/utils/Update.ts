@@ -48,7 +48,7 @@ class Update {
       )
       const body = await response.json()
       if (response.ok) {
-        dispatch(updateCompany(body.user))
+        dispatch(updateCompany(body.company))
         return
       }
       throw new Error(body.error)
