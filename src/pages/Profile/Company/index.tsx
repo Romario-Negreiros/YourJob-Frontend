@@ -16,7 +16,8 @@ import {
   CompanyProfileInfo,
   CreateVagancyForm,
   Avaliations,
-  CreateAvaliationForm
+  CreateAvaliationForm,
+  NoAuthorization
 } from '../../../components'
 
 import BusinessIcon from '@mui/icons-material/Business'
@@ -54,17 +55,26 @@ const initialListItems: CompanyItem[] = [
     active: false
   },
   {
-    text: 'Create Vagancy',
-    icon: <AddIcon color="primary" />,
-    renderComponent: (company: Company) => (
-      <CreateVagancyForm key="createVagancyForm" company={company} />
-    ),
-    active: false
-  },
-  {
     text: 'Avaliations',
     icon: <ThumbsUpDownIcon color="primary" />,
     renderComponent: (company: Company) => <Avaliations key="avaliations" company={company} />,
+    active: false
+  },
+  {
+    text: 'Create Vagancy',
+    icon: <AddIcon color="primary" />,
+    renderComponent: (
+      company: Company,
+      setCompany: (company: Company | null) => void,
+      isCurrentCompany?: boolean
+    ) => {
+      if (isCurrentCompany) {
+        return (
+          <CreateVagancyForm key="createVagancyForm" company={company} setCompany={setCompany} />
+        )
+      }
+      return <NoAuthorization />
+    },
     active: false
   },
   {
@@ -108,7 +118,7 @@ const CompanyProfile: React.FC = () => {
       setError('Invalid company id!')
       setIsLoaded(true)
     }
-    if (currentCompany && params.id === currentCompany.id) {
+    if (currentCompany && Number(params.id) === currentCompany.id) {
       setCompany(currentCompany)
       setIsLoaded(true)
     } else {
@@ -142,6 +152,8 @@ const CompanyProfile: React.FC = () => {
 
     return () => controller.abort()
   }, [])
+
+  console.log(company)
 
   if (!isLoaded) {
     return (
