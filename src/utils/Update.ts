@@ -27,7 +27,7 @@ class Update {
       }
       throw new Error(body.error)
     } else {
-      throw new Error('No authorization to complete this action found!')
+      throw new Error('No authorization to complete this action!')
     }
   }
 
@@ -53,7 +53,7 @@ class Update {
       }
       throw new Error(body.error)
     } else {
-      throw new Error('No authorization to complete this action found!')
+      throw new Error('No authorization to complete this action!')
     }
   }
 }
