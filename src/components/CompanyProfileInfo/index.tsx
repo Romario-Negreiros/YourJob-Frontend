@@ -52,6 +52,10 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
     }
   }
 
+  React.useEffect(() => {
+    return () => controller.abort()
+  })
+
   if (!isLoaded) {
     return (
       <Grid sx={{ display: 'grid', placeItems: 'center' }}>

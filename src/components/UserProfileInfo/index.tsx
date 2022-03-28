@@ -56,6 +56,10 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
     }
   }
 
+  React.useEffect(() => {
+    return () => controller.abort()
+  })
+
   if (!isLoaded) {
     return (
       <Grid sx={{ display: 'grid', placeItems: 'center' }}>
