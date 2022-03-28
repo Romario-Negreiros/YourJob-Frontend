@@ -5,6 +5,14 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 ### Libraries in use
 
 - React router dom
+- Lottie react
+- Firebase
+- Material UI
+- Redux
+- React-redux
+- Redux toolkit
+- React hook form
+- React currency input field
 
 ### Progress
 
