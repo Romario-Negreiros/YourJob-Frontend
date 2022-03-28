@@ -153,8 +153,6 @@ const CompanyProfile: React.FC = () => {
     return () => controller.abort()
   }, [])
 
-  console.log(company)
-
   if (!isLoaded) {
     return (
       <Box
