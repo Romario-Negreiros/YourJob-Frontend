@@ -12,7 +12,7 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 - React-redux
 - Redux toolkit
 - React hook form
-- React currency input field
+- React number format
 
 ### Progress
 
