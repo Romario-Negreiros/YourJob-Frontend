@@ -7,7 +7,7 @@ export interface Props {
 
 export interface Inputs {
   description: string
-  salary: number
+  salary: any
   position: string
   category: string
 }

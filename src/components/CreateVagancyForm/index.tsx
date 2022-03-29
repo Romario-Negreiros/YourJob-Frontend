@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import update from '../../utils/Update'
 import { useAppDispatch } from '../../app/hooks'
 
@@ -9,6 +9,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 import Alert from '@mui/material/Alert'
+import SalaryInput from './custom/SalaryInput'
 
 import { Company } from '../../app/slices/company/interfaces'
 import { Props, Inputs } from './interfaces'
@@ -21,7 +22,8 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
+    control
   } = useForm<Inputs>()
   const controller = React.useMemo(() => new AbortController(), [])
 
@@ -33,7 +35,10 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
         const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vagancy', {
           method: 'POST',
           signal: controller.signal,
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            ...data,
+            salary: Number(String(data.salary()).slice(0, String(data.salary()).length - 2)).toLocaleString('en-US')
+          }),
           headers: new Headers({
             'Content-Type': 'application/json',
             authorization: jwt
@@ -44,6 +49,7 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
           const companyCopy: Company = JSON.parse(JSON.stringify(company))
           companyCopy['company:vagancies'].push(body.vagancy)
           await update.company(companyCopy, dispatch, controller)
+          setSuccess('Successfully created vagancy!')
           setCompany(companyCopy)
           return
         }
@@ -114,15 +120,10 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
         />
       </Grid>
       <Grid item xs={12} md={6} sx={{ textAlign: 'center' }}>
-        <TextField
-          label="Salary"
-          type="number"
-          {...register('salary', {
-            required: 'Salary is required!'
-          })}
-          sx={{ width: 240 }}
-          error={errors.salary && true}
-          helperText={errors.salary?.message}
+        <Controller
+          name="salary"
+          control={control}
+          render={({ field }) => <SalaryInput {...field} />}
         />
       </Grid>
       <Grid item xs={12} md={6} sx={{ textAlign: 'center' }}>
