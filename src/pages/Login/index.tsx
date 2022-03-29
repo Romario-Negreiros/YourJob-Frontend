@@ -39,7 +39,6 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch()
   const classes = useStyles()
   const navigate = useNavigate()
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const handleLoginMode = () => {
     if (loginMode === 'users') {
@@ -56,7 +55,6 @@ const Login: React.FC = () => {
     try {
       const response = await fetch(`https://yourjob-api.herokuapp.com/${loginMode}/authenticate`, {
         method: 'POST',
-        signal: controller.signal,
         body: JSON.stringify(data),
         headers: new Headers({
           'Content-Type': 'application/json'
@@ -83,10 +81,6 @@ const Login: React.FC = () => {
       setIsLoaded(true)
     }
   }
-
-  React.useEffect(() => {
-    return () => controller.abort()
-  })
 
   if (!isLoaded) {
     return (

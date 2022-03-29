@@ -48,7 +48,6 @@ const UserRegister: React.FC = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const formData = useAppSelector(state => state.userRegisterForm.data)
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const handleNext = () => setActiveStep(activeStep + 1)
 
@@ -81,7 +80,6 @@ const UserRegister: React.FC = () => {
       try {
         const response = await fetch('https://yourjob-api.herokuapp.com/users/register', {
           method: 'POST',
-          signal: controller.signal,
           body: JSON.stringify(formData),
           headers: new Headers({
             'Content-Type': 'application/json'

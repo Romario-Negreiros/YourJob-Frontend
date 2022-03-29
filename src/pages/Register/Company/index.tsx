@@ -48,7 +48,6 @@ const CompanyRegister: React.FC = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
   const formData = useAppSelector(state => state.companyRegisterForm.data)
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const handleNext = () => setActiveStep(activeStep + 1)
 
@@ -75,7 +74,6 @@ const CompanyRegister: React.FC = () => {
       try {
         const response = await fetch('https://yourjob-api.herokuapp.com/companies/register', {
           method: 'POST',
-          signal: controller.signal,
           body: JSON.stringify({ ...formData, contactNumber: String(formData.contactNumber) }),
           headers: new Headers({
             'Content-Type': 'application/json'
@@ -105,10 +103,6 @@ const CompanyRegister: React.FC = () => {
       }
     }
   }
-
-  React.useEffect(() => {
-    return () => controller.abort()
-  })
 
   if (!isLoaded) {
     return (
