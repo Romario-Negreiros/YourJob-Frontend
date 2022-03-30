@@ -12,9 +12,9 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Alert from '@mui/material/Alert'
 import {
   ProfileDrawer,
-  CreatedVagancies,
+  CreatedVacancies,
   CompanyProfileInfo,
-  CreateVagancyForm,
+  CreateVacancyForm,
   Avaliations,
   CreateAvaliationForm,
   NoAuthorization
@@ -47,10 +47,10 @@ const initialListItems: CompanyItem[] = [
     active: true
   },
   {
-    text: 'Created Vagancies',
+    text: 'Created Vacancies',
     icon: <PeopleIcon color="primary" />,
     renderComponent: (company: Company) => (
-      <CreatedVagancies key="createdVagancies" company={company} />
+      <CreatedVacancies key="createdVacancies" company={company} />
     ),
     active: false
   },
@@ -61,7 +61,7 @@ const initialListItems: CompanyItem[] = [
     active: false
   },
   {
-    text: 'Create Vagancy',
+    text: 'Create Vacancy',
     icon: <AddIcon color="primary" />,
     renderComponent: (
       company: Company,
@@ -70,7 +70,7 @@ const initialListItems: CompanyItem[] = [
     ) => {
       if (isCurrentCompany) {
         return (
-          <CreateVagancyForm key="createVagancyForm" company={company} setCompany={setCompany} />
+          <CreateVacancyForm key="createVacancyForm" company={company} setCompany={setCompany} />
         )
       }
       return <NoAuthorization />

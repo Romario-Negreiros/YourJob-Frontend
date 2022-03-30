@@ -34,7 +34,7 @@ const Home: React.FC = () => {
       <Grid item className={classes.grid} xs={1} sx={{ mt: 4 }}>
         <Box className={classes.box}>
           <Typography variant="h2" className={`${classes.typography} ${classes.customFont}`}>
-            Start finding vagancies now!
+            Start finding vacancies now!
           </Typography>
           <Typography
             variant="body1"
@@ -47,9 +47,9 @@ const Home: React.FC = () => {
             voluptas a earum et deleniti dolores pariatur! Dolores provident perferendis enim in
             maiores?
           </Typography>
-          <RouterLink className={classes.link} to="/vagancies">
+          <RouterLink className={classes.link} to="/vacancies">
             <Link underline="always" component="button" variant="h6">
-              Vagancies
+              Vacancies
             </Link>
           </RouterLink>
           <RouterLink className={classes.link} to="/register">

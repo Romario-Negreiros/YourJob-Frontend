@@ -32,7 +32,7 @@ const CompaniesHomePage: React.FC = () => {
       <Grid item className={classes.grid} xs={1} sx={{ mt: 4 }}>
         <Box className={classes.box}>
           <Typography variant="h2" className={`${classes.typography} ${classes.customFont}`}>
-            Share available vagancies in your company!
+            Share available vacancies in your company!
           </Typography>
           <Typography
             variant="body1"

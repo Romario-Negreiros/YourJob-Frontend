@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 import Layout from '../layouts'
 import Home from './Home'
 import NoMatch from './NoMatch'
-import Vagancies from './Vagancies'
+import Vacancies from './Vacancies'
 import Login from './Login'
 import CompaniesHomePage from './CompaniesHomePage'
 import { UserRegister, CompanyRegister } from './Register'
@@ -21,7 +21,7 @@ const Pages: React.FC = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="vagancies" element={<Vagancies />} />
+        <Route path="vacancies" element={<Vacancies />} />
         <Route path="*" element={<NoMatch />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<UserRegister />} />

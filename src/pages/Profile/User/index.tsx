@@ -10,7 +10,7 @@ import Button from '@mui/material/Button'
 import Drawer from '@mui/material/Drawer'
 import CircularProgress from '@mui/material/CircularProgress'
 import Alert from '@mui/material/Alert'
-import { ProfileDrawer, SavedVagancies, UserProfileInfo } from '../../../components'
+import { ProfileDrawer, SavedVacancies, UserProfileInfo } from '../../../components'
 
 import BookmarksIcon from '@mui/icons-material/Bookmarks'
 import AccountBoxIcon from '@mui/icons-material/AccountBox'
@@ -37,9 +37,9 @@ const initialListItems: UserItem[] = [
     active: true
   },
   {
-    text: 'Saved Vagancies',
+    text: 'Saved Vacancies',
     icon: <BookmarksIcon color="primary" />,
-    renderComponent: (user: User) => <SavedVagancies key="savedVagancies" user={user} />,
+    renderComponent: (user: User) => <SavedVacancies key="savedVacancies" user={user} />,
     active: false
   }
 ]
