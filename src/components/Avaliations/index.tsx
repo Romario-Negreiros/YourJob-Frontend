@@ -22,7 +22,7 @@ const Avaliations: React.FC<Props> = ({ company }) => {
         <Grid item key={i + 'ok'} xs={12} md={6} lg={4}>
           <Card>
             <CardHeader
-              avatar={<Avatar aria-label="vagancy">R</Avatar>}
+              avatar={<Avatar aria-label="vacancy">R</Avatar>}
               title="user.name"
               subheader="avaliation.createdAt"
             />

@@ -14,16 +14,16 @@ import { Props } from './interfaces'
 import BusinessIcon from '@mui/icons-material/Business'
 import LinkIcon from '@mui/icons-material/Link'
 
-const Vagancy: React.FC<Props> = ({ breakpoints }) => {
+const Vacancy: React.FC<Props> = ({ breakpoints }) => {
   const { xs, sm, md, lg } = breakpoints
 
   return (
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
       <Card>
         <CardHeader
-          avatar={<Avatar aria-label="vagancy">R</Avatar>}
+          avatar={<Avatar aria-label="vacancy">R</Avatar>}
           title="company.name"
-          subheader="vagancy.createdAt"
+          subheader="vacancy.createdAt"
         />
         <CardContent>
           <Typography variant="body2" color="text.primary">
@@ -44,4 +44,4 @@ const Vagancy: React.FC<Props> = ({ breakpoints }) => {
   )
 }
 
-export default Vagancy
+export default Vacancy

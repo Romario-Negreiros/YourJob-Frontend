@@ -28,8 +28,8 @@ const Navigation: React.FC = () => {
       <Button variant="outlined" color="secondary" onClick={() => navigate('/users')}>
         Users
       </Button>
-      <Button variant="outlined" color="secondary" onClick={() => navigate('/vagancies')}>
-        Vagancies
+      <Button variant="outlined" color="secondary" onClick={() => navigate('/vacancies')}>
+        Vacancies
       </Button>
     </Box>
   )

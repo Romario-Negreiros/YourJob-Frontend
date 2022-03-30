@@ -14,21 +14,28 @@ import { Props } from './interfaces'
 import BookmarkAdd from '@mui/icons-material/BookmarkAdd'
 import LinkIcon from '@mui/icons-material/Link'
 
-const Vagancy: React.FC<Props> = ({ breakpoints }) => {
+const Vacancy: React.FC<Props> = ({ breakpoints, companyLogo, companyName, vacancy }) => {
   const { xs, sm, md, lg } = breakpoints
+  console.log(vacancy)
 
   return (
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
       <Card>
         <CardHeader
-          avatar={<Avatar aria-label="vagancy">R</Avatar>}
+          avatar={
+            <Avatar aria-label="vacancy" src={companyLogo || ''}>
+              {companyLogo ? '' : companyName?.charAt(0)}
+            </Avatar>
+          }
           title="company.name"
-          subheader="vagancy.createdAt"
+          subheader="vacancy.createdAt"
         />
         <CardContent>
           <Typography variant="body2" color="text.primary">
-            This impressive paella is a perfect party dish and a fun meal to cook together with your
-            guests. Add 1 cup of frozen peas along with the mussels, if you like.
+            {vacancy.description}
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            {vacancy.salary}
           </Typography>
         </CardContent>
         <CardActions>
@@ -44,4 +51,4 @@ const Vagancy: React.FC<Props> = ({ breakpoints }) => {
   )
 }
 
-export default Vagancy
+export default Vacancy

@@ -20,9 +20,9 @@ const User: React.FC<Props> = ({ breakpoints }) => {
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
       <Card>
         <CardHeader
-          avatar={<Avatar aria-label="vagancy">U</Avatar>}
+          avatar={<Avatar aria-label="vacancy">U</Avatar>}
           title="user.name"
-          subheader="vagancy.createdAt"
+          subheader="vacancy.createdAt"
         />
         <CardContent>
           <Typography variant="body2" color="text.primary">

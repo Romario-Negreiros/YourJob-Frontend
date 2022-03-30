@@ -14,7 +14,7 @@ import SalaryInput from './custom/SalaryInput'
 import { Company } from '../../app/slices/company/interfaces'
 import { Props, Inputs } from './interfaces'
 
-const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
+const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
   const [error, setError] = React.useState('')
   const [success, setSuccess] = React.useState('')
   const [isLoaded, setIsLoaded] = React.useState(true)
@@ -32,12 +32,12 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
       setIsLoaded(false)
       const jwt = localStorage.getItem('jwt')
       if (jwt) {
-        const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vagancy', {
+        const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vacancy', {
           method: 'POST',
           signal: controller.signal,
           body: JSON.stringify({
             ...data,
-            salary: Number(String(data.salary()).slice(0, String(data.salary()).length - 2)).toLocaleString('en-US')
+            salary: data.salary()
           }),
           headers: new Headers({
             'Content-Type': 'application/json',
@@ -47,9 +47,9 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
         const body = await response.json()
         if (response.ok) {
           const companyCopy: Company = JSON.parse(JSON.stringify(company))
-          companyCopy['company:vagancies'].push(body.vagancy)
+          companyCopy['company:vacancies'].push(body.vacancy)
           await update.company(companyCopy, dispatch, controller)
-          setSuccess('Successfully created vagancy!')
+          setSuccess('Successfully created vacancy!')
           setCompany(companyCopy)
           return
         }
@@ -57,7 +57,7 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
       }
       throw new Error('No authorization to complete this action!')
     } catch (err) {
-      err instanceof Error ? setError(err.message) : setError('Unable to create vagancy!')
+      err instanceof Error ? setError(err.message) : setError('Unable to create vacancy!')
     } finally {
       setIsLoaded(true)
     }
@@ -146,4 +146,4 @@ const CreateVagancyForm: React.FC<Props> = ({ company, setCompany }) => {
   )
 }
 
-export default CreateVagancyForm
+export default CreateVacancyForm
