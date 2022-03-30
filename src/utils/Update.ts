@@ -5,7 +5,7 @@ import { updateUser } from '../app/slices/user'
 import { updateCompany } from '../app/slices/company'
 
 class Update {
-  public async user (user: User, dispatch: AppDispatch, controller: AbortController) {
+  public user = async (user: User, dispatch: AppDispatch, controller: AbortController) => {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       const response = await fetch(
@@ -31,7 +31,7 @@ class Update {
     }
   }
 
-  public async company (company: Company, dispatch: AppDispatch, controller: AbortController) {
+  public company = async (company: Company, dispatch: AppDispatch, controller: AbortController) => {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       const response = await fetch(

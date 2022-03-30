@@ -1,4 +1,4 @@
-interface Vagancy {
+export interface Vacancy {
   id: Readonly<number>
   companyId: string
   description: string
@@ -19,7 +19,7 @@ export interface Company {
   alpha2Code: string
   website: string
   companyLogo: string
-  'company:vagancies': Vagancy[]
+  'company:vacancies': Vacancy[]
   passwordResetToken: string | null
   resetTokenExpiration: string | null
   verifyEmailToken: string | null
