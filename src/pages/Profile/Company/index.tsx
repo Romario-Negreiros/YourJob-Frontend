@@ -73,7 +73,7 @@ const initialListItems: CompanyItem[] = [
           <CreateVacancyForm key="createVacancyForm" company={company} setCompany={setCompany} />
         )
       }
-      return <NoAuthorization />
+      return <NoAuthorization key="noAuthorization" />
     },
     active: false
   },
