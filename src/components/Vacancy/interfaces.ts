@@ -1,4 +1,4 @@
-import { Vacancy } from '../../app/slices/company/interfaces'
+import { Vacancy, Company } from '../../app/slices/company/interfaces'
 
 export interface Props {
   breakpoints: {
@@ -8,6 +8,5 @@ export interface Props {
     lg?: number
   }
   vacancy: Vacancy
-  companyName?: string
-  companyLogo?: string
+  company: Company
 }

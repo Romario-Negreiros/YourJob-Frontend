@@ -22,8 +22,7 @@ const CreatedVacancies: React.FC<Props> = ({ company }) => {
       {company['company:vacancies'].map(vacancy => (
         <Vacancy
           key={vacancy.id}
-          companyLogo={company.companyLogo}
-          companyName={company.name}
+          company={company}
           vacancy={vacancy}
           breakpoints={breakpoints}
         />

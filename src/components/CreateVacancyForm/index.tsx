@@ -32,12 +32,13 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
       setIsLoaded(false)
       const jwt = localStorage.getItem('jwt')
       if (jwt) {
+        const salary: number = data.salary() / 100
         const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vacancy', {
           method: 'POST',
           signal: controller.signal,
           body: JSON.stringify({
             ...data,
-            salary: data.salary()
+            salary: salary
           }),
           headers: new Headers({
             'Content-Type': 'application/json',

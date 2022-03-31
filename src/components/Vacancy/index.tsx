@@ -14,7 +14,7 @@ import { Props } from './interfaces'
 import BookmarkAdd from '@mui/icons-material/BookmarkAdd'
 import LinkIcon from '@mui/icons-material/Link'
 
-const Vacancy: React.FC<Props> = ({ breakpoints, companyLogo, companyName, vacancy }) => {
+const Vacancy: React.FC<Props> = ({ breakpoints, company, vacancy }) => {
   const { xs, sm, md, lg } = breakpoints
   console.log(vacancy)
 
@@ -23,19 +23,19 @@ const Vacancy: React.FC<Props> = ({ breakpoints, companyLogo, companyName, vacan
       <Card>
         <CardHeader
           avatar={
-            <Avatar aria-label="vacancy" src={companyLogo || ''}>
-              {companyLogo ? '' : companyName?.charAt(0)}
+            <Avatar aria-label="vacancy" src={company?.companyLogo || ''}>
+              {company?.companyLogo ? '' : company?.name?.charAt(0)}
             </Avatar>
           }
-          title="company.name"
-          subheader="vacancy.createdAt"
+          title={company.name}
+          subheader={new Date(vacancy.createdAt).toLocaleDateString()}
         />
         <CardContent>
           <Typography variant="body2" color="text.primary">
             {vacancy.description}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {vacancy.salary}
+            ${vacancy.salary.toLocaleString('en-US')}
           </Typography>
         </CardContent>
         <CardActions>
@@ -45,6 +45,7 @@ const Vacancy: React.FC<Props> = ({ breakpoints, companyLogo, companyName, vacan
           <IconButton size="medium" edge="end">
             <LinkIcon />
           </IconButton>
+          {}
         </CardActions>
       </Card>
     </Grid>
