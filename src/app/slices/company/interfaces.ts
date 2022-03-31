@@ -5,6 +5,7 @@ export interface Vacancy {
   salary: number
   position: string
   category: string
+  'company:vacancies': Company
   createdAt: Readonly<string>
   updatedAt: Readonly<string>
 }
