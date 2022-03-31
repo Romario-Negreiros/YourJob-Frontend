@@ -124,7 +124,7 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
         <Controller
           name="salary"
           control={control}
-          render={({ field }) => <SalaryInput {...field} />}
+          render={({ field, field: { ref } }) => <SalaryInput {...field} ref={ref} />}
         />
       </Grid>
       <Grid item xs={12} md={6} sx={{ textAlign: 'center' }}>
