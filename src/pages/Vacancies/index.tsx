@@ -2,6 +2,7 @@ import React from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import vacanciesFetcher from './functions/fetchVacancies'
+import composeUrl from '../../utils/composeUrl'
 
 import { Vacancy } from '../../components'
 import Grid from '@mui/material/Grid'
@@ -29,15 +30,25 @@ const Vacancies: React.FC = () => {
   const [vacancies, setVacancies] = React.useState<IVacancy[]>([])
   const { register, handleSubmit } = useForm<Inputs>()
 
-  const onSearch: SubmitHandler<Inputs> = async data => {}
+  const onSubmit: SubmitHandler<Inputs> = async data => {
+    try {
+      setIsLoaded(false)
+      const url = composeUrl(data, 'https://yourjob-api.herokuapp.com/vacancies')
+      const vacancies = await vacanciesFetcher.filter(url)
+      setVacancies(vacancies)
+    } catch (err) {
+      err instanceof Error ? setError(err.message) : setError('Unable to search vacancies!')
+    } finally {
+      setIsLoaded(true)
+    }
+  }
 
   React.useEffect(() => {
     ;(async () => {
       try {
         setIsLoaded(false)
-        const vacanciesList = await vacanciesFetcher.list()
-        setVacancies(vacanciesList)
-        setIsLoaded(true)
+        const vacancies = await vacanciesFetcher.list()
+        setVacancies(vacancies)
       } catch (err) {
         err instanceof Error ? setError(err.message) : setError('Unable to load list of vacancies!')
       } finally {
@@ -54,7 +65,7 @@ const Vacancies: React.FC = () => {
           direction={{ xs: 'column', sm: 'row' }}
           spacing={1}
           component="form"
-          onSubmit={handleSubmit(onSearch)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <TextField label="Region" fullWidth {...register('region')} variant="outlined" />
           <TextField label="Category" fullWidth {...register('category')} variant="outlined" />
@@ -79,12 +90,12 @@ const Vacancies: React.FC = () => {
           <CircularProgress color="secondary" />
         </Grid>
       ) : error ? (
-        <Grid item sx={{ width: '100%' }}>
+        <Grid item sx={{ width: '100%', p: 10 }}>
           <Alert severity="error">{error}</Alert>
         </Grid>
       ) : (
         vacancies.map(vacancy => (
-          <Vacancy key={vacancy.id} vacancy={vacancy} breakpoints={breakpoints} />
+          <Vacancy key={vacancy.id} vacancy={vacancy} company={vacancy['company:vacancies']} breakpoints={breakpoints} />
         ))
       )}
     </Grid>
