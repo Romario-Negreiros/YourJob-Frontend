@@ -101,11 +101,11 @@ const Vacancy: React.FC<Props> = ({
           )}
           {currentCompany ? (
             <IconButton size="medium" edge="end">
-              <LinkIcon />
+              <EditIcon />
             </IconButton>
           ) : (
             <IconButton size="medium" edge="end">
-              <EditIcon />
+              <LinkIcon />
             </IconButton>
           )}
           {currentCompany && (
