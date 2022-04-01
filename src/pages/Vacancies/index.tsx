@@ -69,7 +69,7 @@ const Vacancies: React.FC = () => {
           component="form"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField label="Region" fullWidth {...register('region')} variant="outlined" />
+          <TextField label="Country" fullWidth {...register('country')} variant="outlined" />
           <TextField label="Category" fullWidth {...register('category')} variant="outlined" />
           <TextField label="Position" fullWidth {...register('position')} variant="outlined" />
           <TextField

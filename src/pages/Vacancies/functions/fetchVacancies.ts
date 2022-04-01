@@ -27,7 +27,7 @@ class VacanciesFetcher {
     })
     const body = await response.json()
     if (response.ok) {
-      if (body.vagancies.length) {
+      if (body.vacancies.length) {
         return body.vacancies
       }
       throw new Error('No vacancies found for these filters!')

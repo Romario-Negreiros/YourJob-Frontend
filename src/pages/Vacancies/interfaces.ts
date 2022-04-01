@@ -1,5 +1,5 @@
 export interface Inputs {
-  region: string
+  country: string
   position: string
   category: string
   salary: string
