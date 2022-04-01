@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useAppSelector } from '../../app/hooks'
 import vacanciesFetcher from './functions/fetchVacancies'
 import composeUrl from '../../utils/composeUrl'
 
@@ -29,6 +30,7 @@ const Vacancies: React.FC = () => {
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [vacancies, setVacancies] = React.useState<IVacancy[]>([])
   const { register, handleSubmit } = useForm<Inputs>()
+  const { company: currentCompany, user: currentUser } = useAppSelector(state => state)
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -94,9 +96,38 @@ const Vacancies: React.FC = () => {
           <Alert severity="error">{error}</Alert>
         </Grid>
       ) : (
-        vacancies.map(vacancy => (
-          <Vacancy key={vacancy.id} vacancy={vacancy} company={vacancy['company:vacancies']} breakpoints={breakpoints} />
-        ))
+        vacancies.map(vacancy => {
+          if (currentUser.data) {
+            return (
+              <Vacancy
+                key={vacancy.id}
+                breakpoints={breakpoints}
+                company={vacancy['company:vacancies']}
+                vacancy={vacancy}
+                currentUser={currentUser.data}
+              />
+            )
+          } else if (currentCompany.data) {
+            return (
+              <Vacancy
+                key={vacancy.id}
+                breakpoints={breakpoints}
+                company={vacancy['company:vacancies']}
+                vacancy={vacancy}
+                currentCompany={currentCompany.data}
+              />
+            )
+          } else {
+            return (
+              <Vacancy
+                key={vacancy.id}
+                breakpoints={breakpoints}
+                company={vacancy['company:vacancies']}
+                vacancy={vacancy}
+              />
+            )
+          }
+        })
       )}
     </Grid>
   )
