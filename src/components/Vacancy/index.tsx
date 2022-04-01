@@ -1,6 +1,7 @@
 import React from 'react'
 
 import saveVacancy from './functions/saveVacancy'
+import removeSavedVacancy from './functions/removeSavedVacancy'
 import { useAppDispatch } from '../../app/hooks'
 
 import Grid from '@mui/material/Grid'
@@ -85,7 +86,7 @@ const Vacancy: React.FC<Props> = ({
                 if (
                   currentUser.savedVacancies.find(savedVacancy => savedVacancy.id === vacancy.id)
                 ) {
-                  console.log('Stupid')
+                  removeSavedVacancy(currentUser, vacancy, handleOpen, dispatch)
                 } else {
                   saveVacancy(currentUser, vacancy, handleOpen, dispatch)
                 }
