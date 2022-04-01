@@ -1,3 +1,5 @@
+import { Vacancy } from '../company/interfaces'
+
 export interface User {
   id: Readonly<number>;
   name: string;
@@ -7,6 +9,7 @@ export interface User {
   curriculum: string | null;
   workingArea: string;
   age: number;
+  savedVacancies: Vacancy[]
   passwordResetToken: string | null;
   resetTokenExpiration: string | null;
   verifyEmailToken: string | null;
