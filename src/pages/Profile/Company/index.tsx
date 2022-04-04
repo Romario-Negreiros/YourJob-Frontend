@@ -49,8 +49,17 @@ const initialListItems: CompanyItem[] = [
   {
     text: 'Created Vacancies',
     icon: <PeopleIcon color="primary" />,
-    renderComponent: (company: Company) => (
-      <CreatedVacancies key="createdVacancies" company={company} />
+    renderComponent: (
+      company: Company,
+      setCompany: (company: Company | null) => void,
+      isCurrentCompany?: boolean
+    ) => (
+      <CreatedVacancies
+        key="createdVacancies"
+        company={company}
+        setCompany={setCompany}
+        isCurrentCompany={isCurrentCompany}
+      />
     ),
     active: false
   },
