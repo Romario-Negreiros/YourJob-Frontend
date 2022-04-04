@@ -39,7 +39,9 @@ const initialListItems: UserItem[] = [
   {
     text: 'Saved Vacancies',
     icon: <BookmarksIcon color="primary" />,
-    renderComponent: (user: User) => <SavedVacancies key="savedVacancies" user={user} />,
+    renderComponent: (user: User, setUser: (user: User | null) => void) => (
+      <SavedVacancies key="savedVacancies" user={user} setUser={setUser} />
+    ),
     active: false
   }
 ]
