@@ -1,21 +1,21 @@
-import { updateUser } from '../../../app/slices/user'
+import { updateCompany } from '../../../app/slices/company'
 
-import { User } from '../../../app/slices/user/interfaces'
+import { Company } from '../../../app/slices/company/interfaces'
 import { AppDispatch } from '../../../app/store'
 import { AlertColor } from '@mui/material'
 
-const removeSavedVacancy = async (
-  user: User,
+const deleteVacancy = async (
+  company: Company,
   vacancyID: Readonly<number>,
   handleOpen: (message: string, severity: AlertColor) => void,
   dispatch: AppDispatch,
-  setUser?: (user: User | null) => void
+  setCompany?: (company: Company | null) => void
 ) => {
   try {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       const response = await fetch(
-        `https://yourjob-api.herokuapp.com/vacancies/${vacancyID}/removeSavedVacancy`,
+        `https://yourjob-api.herokuapp.com/vacancies/${vacancyID}/delete`,
         {
           method: 'DELETE',
           headers: new Headers({
@@ -26,13 +26,11 @@ const removeSavedVacancy = async (
       )
       const body = await response.json()
       if (response.ok) {
-        const userCopy: User = JSON.parse(JSON.stringify(user))
-        userCopy.savedVacancies = userCopy.savedVacancies.filter(savedVacancy => savedVacancy.id !== vacancyID)
-        dispatch(updateUser(userCopy))
-        if (setUser) {
-          setUser(userCopy)
+        dispatch(updateCompany(body.company))
+        if (setCompany) {
+          setCompany(body.company)
         }
-        handleOpen(body.success, 'success')
+        handleOpen('Vacancy succesfully deleted!', 'success')
         return
       }
       throw new Error(body.error)
@@ -41,8 +39,8 @@ const removeSavedVacancy = async (
   } catch (err) {
     if (err instanceof Error) {
       handleOpen(err.message, 'error')
-    } else handleOpen('Unable to remove saved vacancy!', 'error')
+    } else handleOpen('Unable to delete vacancy!', 'error')
   }
 }
 
-export default removeSavedVacancy
+export default deleteVacancy

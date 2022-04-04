@@ -149,7 +149,6 @@ const CompanyProfileForm: React.FC<Props> = ({ handleNext }) => {
       </Grid>
       <Grid item sx={{ textAlign: 'center' }} xs={12} sm={6} lg={4}>
         <TextField
-          type="number"
           {...register('contactNumber', {
             required: {
               value: true,

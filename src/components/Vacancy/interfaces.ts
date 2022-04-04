@@ -13,4 +13,5 @@ export interface Props {
   currentUser?: User
   currentCompany?: Company
   setUser?: (user: User | null) => void
+  setCompany?: (company: Company | null) => void
 }

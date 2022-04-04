@@ -2,6 +2,7 @@ import React from 'react'
 
 import saveVacancy from './functions/saveVacancy'
 import removeSavedVacancy from './functions/removeSavedVacancy'
+import deleteVacancy from './functions/deleteVacancy'
 import { useAppDispatch } from '../../app/hooks'
 
 import Grid from '@mui/material/Grid'
@@ -30,7 +31,8 @@ const Vacancy: React.FC<Props> = ({
   vacancy,
   currentUser,
   currentCompany,
-  setUser
+  setUser,
+  setCompany
 }) => {
   const { xs, sm, md, lg } = breakpoints
   const [isOpen, setIsOpen] = React.useState(false)
@@ -50,12 +52,14 @@ const Vacancy: React.FC<Props> = ({
     }
 
     setIsOpen(false)
-    setMessage('')
   }
 
   return (
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-      <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar
+        open={isOpen}
+        onClose={handleClose}
+      >
         <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
           {message}
         </Alert>
@@ -87,7 +91,7 @@ const Vacancy: React.FC<Props> = ({
                 if (
                   currentUser.savedVacancies.find(savedVacancy => savedVacancy.id === vacancy.id)
                 ) {
-                  removeSavedVacancy(currentUser, vacancy, handleOpen, dispatch, setUser)
+                  removeSavedVacancy(currentUser, vacancy.id, handleOpen, dispatch, setUser)
                 } else {
                   saveVacancy(currentUser, vacancy, handleOpen, dispatch)
                 }
@@ -110,7 +114,13 @@ const Vacancy: React.FC<Props> = ({
             </IconButton>
           )}
           {currentCompany && (
-            <IconButton size="medium" edge="end">
+            <IconButton
+              size="medium"
+              edge="end"
+              onClick={() =>
+                deleteVacancy(currentCompany, vacancy.id, handleOpen, dispatch, setCompany)
+              }
+            >
               <DeleteIcon />
             </IconButton>
           )}

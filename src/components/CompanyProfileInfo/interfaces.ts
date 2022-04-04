@@ -8,7 +8,7 @@ export interface Props {
 
 export interface Inputs {
   description: string
-  contactNumber: number
+  contactNumber: string
   website: string
   companyLogo: FileList
 }

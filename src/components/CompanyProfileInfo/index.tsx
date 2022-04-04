@@ -26,7 +26,7 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
   } = useForm<Inputs>({
     defaultValues: {
       description: company.description,
-      contactNumber: company.contactNumber,
+      contactNumber: '+' + company.contactNumber,
       website: company.website
     }
   })
@@ -157,7 +157,6 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             })}
             variant="standard"
             fullWidth
-            defaultValue={company.contactNumber}
             InputProps={{
               readOnly: !isEditing,
               disableUnderline: !isEditing

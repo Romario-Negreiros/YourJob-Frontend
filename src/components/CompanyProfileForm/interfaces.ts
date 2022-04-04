@@ -1,7 +1,7 @@
 export interface Inputs {
   description: string;
   country: string;
-  contactNumber: number;
+  contactNumber: string;
   website: string;
   companyLogo: FileList;
 }
