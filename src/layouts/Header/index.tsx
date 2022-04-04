@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { clearUser } from '../../app/slices/user'
 import { clearCompany } from '../../app/slices/company'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Box from '@mui/material/Box'
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -25,6 +25,7 @@ const Header: React.FC = () => {
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>()
   const isMenuOpen = Boolean(menuAnchorEl)
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
   const currentState = useAppSelector(state => state)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -39,6 +40,7 @@ const Header: React.FC = () => {
       dispatch(clearCompany())
     }
     localStorage.removeItem('jwt')
+    navigate('/')
   }
 
   return (
