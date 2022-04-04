@@ -16,7 +16,7 @@ export interface Company {
   email: string
   description: string
   country: string
-  contactNumber: number
+  contactNumber: string
   alpha2Code: string
   website: string
   companyLogo: string
