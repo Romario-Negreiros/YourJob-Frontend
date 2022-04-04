@@ -29,7 +29,8 @@ const Vacancy: React.FC<Props> = ({
   company,
   vacancy,
   currentUser,
-  currentCompany
+  currentCompany,
+  setUser
 }) => {
   const { xs, sm, md, lg } = breakpoints
   const [isOpen, setIsOpen] = React.useState(false)
@@ -86,7 +87,7 @@ const Vacancy: React.FC<Props> = ({
                 if (
                   currentUser.savedVacancies.find(savedVacancy => savedVacancy.id === vacancy.id)
                 ) {
-                  removeSavedVacancy(currentUser, vacancy, handleOpen, dispatch)
+                  removeSavedVacancy(currentUser, vacancy, handleOpen, dispatch, setUser)
                 } else {
                   saveVacancy(currentUser, vacancy, handleOpen, dispatch)
                 }
