@@ -13,17 +13,16 @@ import CardActions from '@mui/material/CardActions'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
-import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
 
 import { Props } from './interfaces'
-import { AlertColor } from '@mui/material'
 
 import BookmarkAdd from '@mui/icons-material/BookmarkAdd'
 import BookmarkRemove from '@mui/icons-material/BookmarkRemove'
 import LinkIcon from '@mui/icons-material/Link'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+
+import toastHandler from '../../context/Toast'
 
 const Vacancy: React.FC<Props> = ({
   breakpoints,
@@ -35,35 +34,11 @@ const Vacancy: React.FC<Props> = ({
   setCompany
 }) => {
   const { xs, sm, md, lg } = breakpoints
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [message, setMessage] = React.useState('')
-  const [severity, setSeverity] = React.useState<AlertColor | undefined>()
   const dispatch = useAppDispatch()
-
-  const handleOpen = (message: string, severity: AlertColor) => {
-    setIsOpen(true)
-    setMessage(message)
-    setSeverity(severity)
-  }
-
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setIsOpen(false)
-  }
+  const { handleOpen } = React.useContext(toastHandler)
 
   return (
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
-      <Snackbar
-        open={isOpen}
-        onClose={handleClose}
-      >
-        <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
-          {message}
-        </Alert>
-      </Snackbar>
       <Card>
         <CardHeader
           avatar={
