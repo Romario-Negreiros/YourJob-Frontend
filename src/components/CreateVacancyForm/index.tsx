@@ -9,7 +9,7 @@ import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
 import CircularProgress from '@mui/material/CircularProgress'
 import Alert from '@mui/material/Alert'
-import SalaryInput from './custom/SalaryInput'
+import SalaryInput from '../custom/SalaryInput'
 
 import { Company } from '../../app/slices/company/interfaces'
 import { Props, Inputs } from './interfaces'

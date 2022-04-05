@@ -98,7 +98,7 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
             </Avatar>
           ) : (
             <Avatar sx={{ margin: 'auto' }} src={company.companyLogo || ''}>
-              {company.companyLogo ? '' : company.name.charAt(0).toUpperCase()}
+              {company.name.charAt(0).toUpperCase()}
             </Avatar>
           )}
         </label>

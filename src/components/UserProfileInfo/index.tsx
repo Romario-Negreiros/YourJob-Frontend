@@ -102,7 +102,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
             </Avatar>
           ) : (
             <Avatar sx={{ margin: 'auto' }} src={user.profilePicture || ''}>
-              {user.profilePicture ? '' : user.name.charAt(0).toUpperCase()}
+              {user.name.charAt(0).toUpperCase()}
             </Avatar>
           )}
         </label>
