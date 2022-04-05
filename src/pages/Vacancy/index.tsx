@@ -7,11 +7,12 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
-import Alert from '@mui/material/Alert'
-import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
-
-import { useParams } from 'react-router-dom'
+import Avatar from '@mui/material/Avatar'
+import Alert from '@mui/material/Alert'
+import Link from '@mui/material/Link'
+import { Link as RouterLink, useParams } from 'react-router-dom'
+import { VacancyPageInfo } from '../../components'
 
 import { Vacancy as IVacancy } from '../../app/slices/company/interfaces'
 
@@ -42,8 +43,6 @@ const Vacancy: React.FC = () => {
     return () => controller.abort()
   }, [])
 
-  console.log(vacancy)
-
   if (!isLoaded) {
     return (
       <Box className={classes.box2}>
@@ -61,29 +60,44 @@ const Vacancy: React.FC = () => {
   return (
     <Grid
       container
-      spacing={2}
+      spacing={4}
       sx={{ padding: { xs: '0 5px', sm: '0 25px', md: '0 45px', lg: '0 85px' } }}
     >
       <Grid item xs={12}>
-        <Paper className={classes.paper} sx={{ paddingBottom: '0' }}>
+        <Paper className={classes.paper} elevation={8} sx={{ paddingBottom: '0' }}>
           <Box sx={{ width: '100%', textAlign: 'center' }}>
             <Typography component="div" variant="h6">
               {company.name}
             </Typography>
-            <Avatar sx={{ margin: 'auto' }} src={company.companyLogo || ''}>{company.name.charAt(0).toUpperCase()}</Avatar>
+            <Avatar sx={{ margin: 'auto' }} src={company.companyLogo || ''}>
+              {company.name.charAt(0).toUpperCase()}
+            </Avatar>
+            <RouterLink className={classes.link} to={`/companies/profile/${company.id}`}>
+              <Link underline="always" component="button" variant="subtitle2">
+                Visit company profile
+              </Link>
+            </RouterLink>
           </Box>
-          <Box sx={{ width: '100%', mt: 4 }}>
-            <Typography variant="subtitle1">
-              Company created at: {new Date(company.createdAt).toLocaleDateString('US')}
+          <Box
+            sx={{
+              width: '100%',
+              mt: 4,
+              display: 'flex',
+              justifyContent: 'space-between',
+              flexDirection: { xs: 'column', md: 'row' }
+            }}
+          >
+            <Typography variant="subtitle2">
+              Created at: {new Date(vacancy.createdAt).toLocaleDateString('US')}
             </Typography>
-            <Typography variant="subtitle1">
-              Vacancy created at: {new Date(vacancy.createdAt).toLocaleDateString('US')}
-            </Typography>
-            <Typography variant="subtitle1">
-              Vacancy last update at: {new Date(vacancy.createdAt).toLocaleDateString('US')}
+            <Typography variant="subtitle2">
+              Last update at: {new Date(vacancy.createdAt).toLocaleDateString('US')}
             </Typography>
           </Box>
         </Paper>
+      </Grid>
+      <Grid item xs={12}>
+        <VacancyPageInfo vacancy={vacancy} company={company} setVacancy={setVacancy} />
       </Grid>
     </Grid>
   )
