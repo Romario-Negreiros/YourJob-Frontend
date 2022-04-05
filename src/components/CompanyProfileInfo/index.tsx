@@ -77,7 +77,7 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
     <Grid
       container
       spacing={4}
-      component={isEditing ? 'form' : 'div'}
+      component={isEditing ? 'form' : 'section'}
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
     >

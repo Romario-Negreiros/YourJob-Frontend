@@ -81,7 +81,7 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
     <Grid
       container
       spacing={4}
-      component={isEditing ? 'form' : 'div'}
+      component={isEditing ? 'form' : 'section'}
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
     >
