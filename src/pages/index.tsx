@@ -15,6 +15,7 @@ import LastStepMessage from './LastStepMessage'
 import VerifyEmail from './VerifyEmail'
 import Companies from './Companies'
 import Users from './Users'
+import Vacancy from './Vacancy'
 
 const Pages: React.FC = () => {
   return (
@@ -31,6 +32,7 @@ const Pages: React.FC = () => {
         <Route path="last_step/:name" element={<LastStepMessage />} />
         <Route path="verify_email/:id/:token/:mode" element={<VerifyEmail />} />
         <Route path="users" element={<Users />} />
+        <Route path="vacancy/:id" element={<Vacancy />} />
         <Route path="companies">
           <Route index element={<CompaniesHomePage />} />
           <Route path="login" element={<Login />} />
