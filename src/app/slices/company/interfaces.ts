@@ -19,7 +19,7 @@ export interface Company {
   contactNumber: string
   alpha2Code: string
   website: string
-  companyLogo: string
+  companyLogo: string | null
   'company:vacancies': Vacancy[]
   passwordResetToken: string | null
   resetTokenExpiration: string | null
