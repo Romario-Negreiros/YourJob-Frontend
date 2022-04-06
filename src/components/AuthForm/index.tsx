@@ -33,7 +33,7 @@ const AuthForm: React.FC<Props> = ({ handleNext, updateData, mode }) => {
       setError(
         'confirmPassword',
         {
-          message: 'Your password is wrong!'
+          message: 'Your password and confirm password fields are different!'
         },
         {
           shouldFocus: true
