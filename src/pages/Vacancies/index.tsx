@@ -2,7 +2,7 @@ import React from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { useAppSelector } from '../../app/hooks'
-import vacanciesFetcher from './functions/fetchVacancies'
+import vacanciesFetcher from './functions/vacanciesFetcher'
 import composeUrl from '../../utils/composeUrl'
 
 import { Vacancy } from '../../components'

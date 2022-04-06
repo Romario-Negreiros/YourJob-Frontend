@@ -1,6 +1,6 @@
 import { User } from '../../../app/slices/user/interfaces'
 
-class UsersFetchers {
+class UsersFetcher {
   public list = async (): Promise<User[]> => {
     const response = await fetch('https://yourjob-api.herokuapp.com/users?limit=20', {
       method: 'GET',
@@ -37,4 +37,4 @@ class UsersFetchers {
   }
 }
 
-export default new UsersFetchers()
+export default new UsersFetcher()

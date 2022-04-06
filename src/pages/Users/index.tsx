@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useForm, SubmitHandler } from 'react-hook-form'
-import usersFetcher from './functions/fetchUsers'
+import usersFetcher from './functions/usersFetcher'
 import composeUrl from '../../utils/composeUrl'
 
 import { User } from '../../components'
@@ -66,7 +66,7 @@ const Users: React.FC = () => {
     <Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
       <Grid item sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
         <Stack
-          sx={{ width: '95%' }}
+          sx={{ width: { xs: '95%', sm: 'fit-content' } }}
           direction={{ xs: 'column', sm: 'row' }}
           spacing={1}
           component="form"
