@@ -32,32 +32,35 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
       setIsLoaded(false)
       const jwt = localStorage.getItem('jwt')
       if (jwt) {
-        const salary: number = data.salary() / 100
-        if (Number.isSafeInteger(salary)) {
-          const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vacancy', {
-            method: 'POST',
-            signal: controller.signal,
-            body: JSON.stringify({
-              ...data,
-              salary: salary
-            }),
-            headers: new Headers({
-              'Content-Type': 'application/json',
-              authorization: jwt
+        if (data.salary) {
+          const salary: number = data.salary() / 100
+          if (Number.isSafeInteger(salary)) {
+            const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vacancy', {
+              method: 'POST',
+              signal: controller.signal,
+              body: JSON.stringify({
+                ...data,
+                salary: salary
+              }),
+              headers: new Headers({
+                'Content-Type': 'application/json',
+                authorization: jwt
+              })
             })
-          })
-          const body = await response.json()
-          if (response.ok) {
-            const companyCopy: Company = JSON.parse(JSON.stringify(company))
-            companyCopy['company:vacancies'].push(body.vacancy)
-            await update.company(companyCopy, dispatch, controller)
-            setSuccess('Successfully created vacancy!')
-            setCompany(companyCopy)
-            return
+            const body = await response.json()
+            if (response.ok) {
+              const companyCopy: Company = JSON.parse(JSON.stringify(company))
+              companyCopy['company:vacancies'].push(body.vacancy)
+              await update.company(companyCopy, dispatch, controller)
+              setSuccess('Successfully created vacancy!')
+              setCompany(companyCopy)
+              return
+            }
+            throw new Error(body.error)
           }
-          throw new Error(body.error)
+          throw new Error('Not a valid number!')
         }
-        throw new Error('Not a valid number!')
+        throw new Error('Salary field is required!')
       }
       throw new Error('No authorization to complete this action!')
     } catch (err) {
@@ -127,13 +130,6 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
         <Controller
           name="salary"
           control={control}
-          rules={{
-            required: 'Salary is required',
-            max: {
-              value: 100000,
-              message: 'Bro, com\'on'
-            }
-          }}
           render={({ field, field: { ref } }) => <SalaryInput {...field} ref={ref} />}
         />
       </Grid>

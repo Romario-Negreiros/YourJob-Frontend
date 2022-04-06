@@ -1,6 +1,8 @@
 import React from 'react'
 
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
+import { useAppDispatch } from '../../app/hooks'
+import { updateCompany } from '../../app/slices/company'
 import useStyles from '../../styles/global'
 
 import Grid from '@mui/material/Grid'
@@ -12,8 +14,9 @@ import Alert from '@mui/material/Alert'
 import SalaryInput from '../../components/custom/SalaryInput'
 
 import { Props, Inputs } from './interfaces'
+import { Vacancy } from '../../app/slices/company/interfaces'
 
-const VacancyPageInfo: React.FC<Props> = ({ vacancy, company, setVacancy, isCurrentCompany }) => {
+const VacancyPageInfo: React.FC<Props> = ({ vacancy, setVacancy, isCurrentCompany }) => {
   const [error, setError] = React.useState('')
   const [isLoaded, setIsLoaded] = React.useState(true)
   const [isEditing, setIsEditing] = React.useState(false)
@@ -25,16 +28,56 @@ const VacancyPageInfo: React.FC<Props> = ({ vacancy, company, setVacancy, isCurr
   } = useForm<Inputs>({
     defaultValues: {
       description: vacancy.description,
-      salary: vacancy.salary,
+      salary: vacancy.salary * 100,
       category: vacancy.category,
       position: vacancy.position
     }
   })
   const classes = useStyles()
+  const dispatch = useAppDispatch()
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
+      const jwt = localStorage.getItem('jwt')
+      if (jwt) {
+        if (data.salary) {
+          let salary = vacancy.salary
+          if (data.salary !== vacancy.salary * 100) {
+            salary = data.salary() / 100
+          }
+          if (Number.isSafeInteger(salary)) {
+            const response = await fetch(
+              `https://yourjob-api.herokuapp.com/vacancies/${vacancy.id}/update`,
+              {
+                method: 'PUT',
+                body: JSON.stringify({
+                  ...data,
+                  salary: salary
+                }),
+                headers: new Headers({
+                  'Content-Type': 'application/json',
+                  authorization: jwt
+                })
+              }
+            )
+            const body = await response.json()
+            if (response.ok) {
+              dispatch(updateCompany(body.company))
+              const updatedVacancy = body.company['company:vacancies'].find(
+                (updatedVac: Vacancy) => updatedVac.id === vacancy.id
+              )
+              setVacancy(updatedVacancy)
+              setIsEditing(false)
+              return
+            }
+            throw new Error(body.error)
+          }
+          throw new Error('Not a valid number!')
+        }
+        throw new Error('Salary field is required!')
+      }
+      throw new Error('No authorization to complete this action!')
     } catch (err) {
       err instanceof Error ? setError(err.message) : setError('Failed to update vacancy!')
     } finally {
@@ -134,21 +177,13 @@ const VacancyPageInfo: React.FC<Props> = ({ vacancy, company, setVacancy, isCurr
           <Controller
             name="salary"
             control={control}
-            rules={{
-              required: 'Salary is required',
-              max: {
-                value: 100000,
-                message: "Bro, com'on"
-              }
-            }}
             render={({ field, field: { ref } }) => (
               <SalaryInput
                 {...field}
                 ref={ref}
                 inputProps={{
                   readOnly: !isEditing,
-                  disableUnderline: !isEditing,
-                  error: errors.salary && true
+                  disableUnderline: !isEditing
                 }}
               />
             )}

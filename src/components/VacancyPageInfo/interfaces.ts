@@ -1,8 +1,7 @@
-import { Vacancy, Company } from '../../app/slices/company/interfaces'
+import { Vacancy } from '../../app/slices/company/interfaces'
 
 export interface Props {
   vacancy: Vacancy
-  company: Company
   setVacancy: (vacancy: Vacancy | null) => void
   isCurrentCompany?: boolean
 }

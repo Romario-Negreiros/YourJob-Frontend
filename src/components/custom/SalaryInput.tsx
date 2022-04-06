@@ -10,8 +10,6 @@ interface Props extends ControllerRenderProps {
   inputProps?: Partial<InputProps>
 }
 
-// HERE
-
 const SalaryInput: React.FC<Props> = ({ onChange, value, inputProps, ...rest }) => {
   const [salary, setSalary] = React.useState<number | undefined>(value / 100)
 

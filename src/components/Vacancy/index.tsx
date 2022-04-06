@@ -13,14 +13,15 @@ import CardActions from '@mui/material/CardActions'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
-
-import { Props } from './interfaces'
+import { Link } from 'react-router-dom'
 
 import BookmarkAdd from '@mui/icons-material/BookmarkAdd'
 import BookmarkRemove from '@mui/icons-material/BookmarkRemove'
 import LinkIcon from '@mui/icons-material/Link'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+
+import { Props } from './interfaces'
 
 import toastHandler from '../../context/Toast'
 
@@ -79,15 +80,11 @@ const Vacancy: React.FC<Props> = ({
               )}
             </IconButton>
           )}
-          {currentCompany ? (
+          <Link to={`/vacancies/${vacancy.id}`}>
             <IconButton size="medium" edge="end">
-              <EditIcon />
+              {currentCompany ? <EditIcon /> : <LinkIcon />}
             </IconButton>
-          ) : (
-            <IconButton size="medium" edge="end">
-              <LinkIcon />
-            </IconButton>
-          )}
+          </Link>
           {currentCompany && (
             <IconButton
               size="medium"
