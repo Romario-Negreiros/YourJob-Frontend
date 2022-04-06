@@ -28,8 +28,8 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 - [x] User profile
 - [ ] Company profile
 - [x] Vacancy details
-- [ ] Forgot password
-- [ ] Reset password
+- [x] Forgot password
+- [x] Reset password
 - [x] Verify email
 
 ### How to contribute
