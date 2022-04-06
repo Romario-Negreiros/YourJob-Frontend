@@ -31,7 +31,7 @@ const Pages: React.FC = () => {
         <Route path="register" element={<UserRegister />} />
         <Route path="profile/:id" element={<UserProfile />} />
         <Route path="forgot_password" element={<ForgotPassword />} />
-        <Route path="reset_password/:token/:mode" element={<ResetPassword />} />
+        <Route path="reset_password/:token/:mode/:email" element={<ResetPassword />} />
         <Route path="last_step/:name" element={<LastStepMessage />} />
         <Route path="verify_email/:id/:token/:mode" element={<VerifyEmail />} />
         <Route path="users" element={<Users />} />
