@@ -22,7 +22,7 @@ const User: React.FC<Props> = ({ breakpoints, user }) => {
       <Card>
         <CardHeader
           avatar={
-            <Avatar aria-label="vacancy" src={user.profilePicture || ''}>
+            <Avatar aria-label="user" src={user.profilePicture || ''}>
               {user.name.charAt(0).toUpperCase()}
             </Avatar>
           }

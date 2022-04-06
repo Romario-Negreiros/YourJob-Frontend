@@ -8,36 +8,38 @@ import CardActions from '@mui/material/CardActions'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import IconButton from '@mui/material/IconButton'
+import { Link } from 'react-router-dom'
 
 import { Props } from './interfaces'
 
 import BusinessIcon from '@mui/icons-material/Business'
-import LinkIcon from '@mui/icons-material/Link'
 
-const Vacancy: React.FC<Props> = ({ breakpoints }) => {
+const Vacancy: React.FC<Props> = ({ breakpoints, company }) => {
   const { xs, sm, md, lg } = breakpoints
 
   return (
     <Grid item xs={xs} sm={sm} md={md} lg={lg}>
       <Card>
         <CardHeader
-          avatar={<Avatar aria-label="vacancy">R</Avatar>}
-          title="company.name"
-          subheader="vacancy.createdAt"
+          avatar={
+            <Avatar aria-label="company" src={company.companyLogo || ''}>
+              {company.name.charAt(0).toUpperCase()}
+            </Avatar>
+          }
+          title={company.name}
+          subheader={company.country}
         />
         <CardContent>
           <Typography variant="body2" color="text.primary">
-            This impressive paella is a perfect party dish and a fun meal to cook together with your
-            guests. Add 1 cup of frozen peas along with the mussels, if you like.
+            {company.description}
           </Typography>
         </CardContent>
         <CardActions>
-          <IconButton size="medium" edge="end">
-            <LinkIcon />
-          </IconButton>
-          <IconButton size="medium" edge="end">
-            <BusinessIcon />
-          </IconButton>
+          <Link to={`/companies/profile/${company.id}`}>
+            <IconButton size="medium" edge="end">
+              <BusinessIcon />
+            </IconButton>
+          </Link>
         </CardActions>
       </Card>
     </Grid>
