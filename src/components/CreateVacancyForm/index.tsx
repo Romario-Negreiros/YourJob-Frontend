@@ -25,7 +25,6 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
     formState: { errors },
     control
   } = useForm<Inputs>()
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -37,7 +36,6 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
           if (Number.isSafeInteger(salary)) {
             const response = await fetch('https://yourjob-api.herokuapp.com/create_new_vacancy', {
               method: 'POST',
-              signal: controller.signal,
               body: JSON.stringify({
                 ...data,
                 salary: salary
@@ -51,7 +49,7 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
             if (response.ok) {
               const companyCopy: Company = JSON.parse(JSON.stringify(company))
               companyCopy['company:vacancies'].push(body.vacancy)
-              await update.company(companyCopy, dispatch, controller)
+              await update.company(companyCopy, dispatch)
               setSuccess('Successfully created vacancy!')
               setCompany(companyCopy)
               return

@@ -35,13 +35,12 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
   const [isEditing, setIsEditing] = React.useState(false)
   const classes = useStyles()
   const dispatch = useAppDispatch()
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
       const updatedCompany = await updateData(company, data)
-      await update.company(updatedCompany, dispatch, controller)
+      await update.company(updatedCompany, dispatch)
 
       setCompany(updatedCompany)
       setIsEditing(false)
@@ -51,10 +50,6 @@ const CompanyProfileInfo: React.FC<Props> = ({ company, setCompany, isCurrentCom
       setIsLoaded(true)
     }
   }
-
-  React.useEffect(() => {
-    return () => controller.abort()
-  })
 
   if (!isLoaded) {
     return (

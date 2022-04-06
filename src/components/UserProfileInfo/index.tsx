@@ -39,13 +39,12 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
   const [isEditing, setIsEditing] = React.useState(false)
   const classes = useStyles()
   const dispatch = useAppDispatch()
-  const controller = React.useMemo(() => new AbortController(), [])
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
       const updatedUser = await updateData(user, data)
-      await update.user(updatedUser, dispatch, controller)
+      await update.user(updatedUser, dispatch)
 
       setUser(updatedUser)
       setIsEditing(false)
@@ -55,10 +54,6 @@ const UserProfileInfo: React.FC<Props> = ({ user, setUser, isCurrentUser }) => {
       setIsLoaded(true)
     }
   }
-
-  React.useEffect(() => {
-    return () => controller.abort()
-  })
 
   if (!isLoaded) {
     return (

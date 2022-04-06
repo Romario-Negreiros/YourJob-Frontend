@@ -5,12 +5,11 @@ import { updateUser } from '../app/slices/user'
 import { updateCompany } from '../app/slices/company'
 
 class Update {
-  public user = async (user: User, dispatch: AppDispatch, controller: AbortController) => {
+  public user = async (user: User, dispatch: AppDispatch) => {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       const response = await fetch(`https://yourjob-api.herokuapp.com/users/profile/${user.id}/update`, {
         method: 'PUT',
-        signal: controller.signal,
         body: JSON.stringify(user),
         headers: new Headers({
           'Content-Type': 'application/json',
@@ -28,14 +27,13 @@ class Update {
     }
   }
 
-  public company = async (company: Company, dispatch: AppDispatch, controller: AbortController) => {
+  public company = async (company: Company, dispatch: AppDispatch) => {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
       const response = await fetch(
         `https://yourjob-api.herokuapp.com/companies/profile/${company.id}/update`,
         {
           method: 'PUT',
-          signal: controller.signal,
           body: JSON.stringify(company),
           headers: new Headers({
             'Content-Type': 'application/json',
