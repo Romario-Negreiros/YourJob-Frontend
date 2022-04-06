@@ -14,7 +14,6 @@ import Alert from '@mui/material/Alert'
 import SalaryInput from '../../components/custom/SalaryInput'
 
 import { Props, Inputs } from './interfaces'
-import { Vacancy } from '../../app/slices/company/interfaces'
 
 const VacancyPageInfo: React.FC<Props> = ({ vacancy, setVacancy, isCurrentCompany }) => {
   const [error, setError] = React.useState('')
@@ -64,10 +63,7 @@ const VacancyPageInfo: React.FC<Props> = ({ vacancy, setVacancy, isCurrentCompan
             const body = await response.json()
             if (response.ok) {
               dispatch(updateCompany(body.company))
-              const updatedVacancy = body.company['company:vacancies'].find(
-                (updatedVac: Vacancy) => updatedVac.id === vacancy.id
-              )
-              setVacancy(updatedVacancy)
+              setVacancy(body.vacancy)
               setIsEditing(false)
               return
             }

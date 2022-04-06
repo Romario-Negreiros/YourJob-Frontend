@@ -22,12 +22,12 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 - [x] Login
 - [x] Register user
 - [x] Register company
-- [ ] Vacancies list
+- [x] Vacancies list
 - [ ] Companies list
 - [ ] Users list
-- [ ] User profile
+- [x] User profile
 - [ ] Company profile
-- [ ] Vacancy details
+- [x] Vacancy details
 - [ ] Forgot password
 - [ ] Reset password
 - [x] Verify email
