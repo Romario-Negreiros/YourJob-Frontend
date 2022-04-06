@@ -22,7 +22,10 @@ const Pages: React.FC = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="vacancies" element={<Vacancies />} />
+        <Route path="vacancies">
+          <Route index element={<Vacancies />} />
+          <Route path=":id" element={<Vacancy />} />
+        </Route>
         <Route path="*" element={<NoMatch />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<UserRegister />} />
@@ -32,7 +35,6 @@ const Pages: React.FC = () => {
         <Route path="last_step/:name" element={<LastStepMessage />} />
         <Route path="verify_email/:id/:token/:mode" element={<VerifyEmail />} />
         <Route path="users" element={<Users />} />
-        <Route path="vacancy/:id" element={<Vacancy />} />
         <Route path="companies">
           <Route index element={<CompaniesHomePage />} />
           <Route path="login" element={<Login />} />

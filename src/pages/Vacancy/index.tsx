@@ -2,6 +2,7 @@ import React from 'react'
 
 import fetchVacancy from './functions/fetchVacancy'
 import useStyles from '../../styles/global'
+import { useAppSelector } from '../../app/hooks'
 
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
@@ -20,15 +21,15 @@ const Vacancy: React.FC = () => {
   const [vacancy, setVacancy] = React.useState<IVacancy | null>(null)
   const [error, setError] = React.useState('')
   const [isLoaded, setIsLoaded] = React.useState(false)
+  const currentCompany = useAppSelector(state => state.company.data)
   const params = useParams()
   const classes = useStyles()
-  const controller = new AbortController()
 
   React.useEffect(() => {
     ;(async () => {
       try {
         if (params.id) {
-          const vacancy = await fetchVacancy(params.id, controller)
+          const vacancy = await fetchVacancy(params.id)
           setVacancy(vacancy)
           return
         }
@@ -39,8 +40,6 @@ const Vacancy: React.FC = () => {
         setIsLoaded(true)
       }
     })()
-
-    return () => controller.abort()
   }, [])
 
   if (!isLoaded) {
@@ -97,7 +96,11 @@ const Vacancy: React.FC = () => {
         </Paper>
       </Grid>
       <Grid item xs={12}>
-        <VacancyPageInfo vacancy={vacancy} company={company} setVacancy={setVacancy} />
+        <VacancyPageInfo
+          vacancy={vacancy}
+          setVacancy={setVacancy}
+          isCurrentCompany={currentCompany?.id === company.id}
+        />
       </Grid>
     </Grid>
   )

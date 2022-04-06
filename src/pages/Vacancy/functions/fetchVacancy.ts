@@ -1,9 +1,8 @@
 import { Vacancy } from '../../../app/slices/company/interfaces'
 
-const fetchVacancy = async (id: string, controller: AbortController): Promise<Vacancy> => {
+const fetchVacancy = async (id: string): Promise<Vacancy> => {
   const response = await fetch(`https://yourjob-api.herokuapp.com/vacancies/${id}`, {
     method: 'GET',
-    signal: controller.signal,
     headers: new Headers({
       'Content-Type': 'application/json'
     })
