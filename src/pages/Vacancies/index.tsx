@@ -29,12 +29,13 @@ const Vacancies: React.FC = () => {
   const [error, setError] = React.useState('')
   const [isLoaded, setIsLoaded] = React.useState(false)
   const [vacancies, setVacancies] = React.useState<IVacancy[]>([])
-  const { register, handleSubmit } = useForm<Inputs>()
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>()
   const { company: currentCompany, user: currentUser } = useAppSelector(state => state)
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       setIsLoaded(false)
+      setError('')
       const url = composeUrl(data, 'https://yourjob-api.herokuapp.com/vacancies')
       const vacancies = await vacanciesFetcher.filter(url)
       setVacancies(vacancies)
@@ -75,10 +76,16 @@ const Vacancies: React.FC = () => {
           <TextField
             label="Salary"
             fullWidth
-            {...register('salary')}
+            {...register('salary', {
+              pattern: {
+                value: /^[\d]*[/]{1}[\d]*$/,
+                message: 'Invalid format (ex: 1000/1500)'
+              }
+            })}
             placeholder="minVal/maxVal"
             variant="outlined"
-            helperText="1000/1500"
+            error={errors.salary && true}
+            helperText={errors.salary?.message}
           />
           <Box sx={{ display: 'grid', placeItems: 'center' }}>
             <IconButton edge="end" type="submit">
