@@ -40,6 +40,7 @@ const Header: React.FC = () => {
       dispatch(clearCompany())
     }
     localStorage.removeItem('jwt')
+    localStorage.removeItem('type')
     navigate('/')
   }
 
