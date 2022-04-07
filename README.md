@@ -26,7 +26,7 @@ This is the backend for YourJob.com, built with nodejs, typescript and using exp
 - [x] Companies list
 - [x] Users list
 - [x] User profile
-- [ ] Company profile
+- [x] Company profile
 - [x] Vacancy details
 - [x] Forgot password
 - [x] Reset password
