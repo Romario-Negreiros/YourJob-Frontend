@@ -6,35 +6,35 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Typography from '@mui/material/Typography'
-import Avatar from '@mui/material/Avatar'
+import Alert from '@mui/material/Alert'
 import Rating from '@mui/material/Rating'
 
-import { Company } from '../../app/slices/company/interfaces'
+import { Props } from './interfaces'
 
-interface Props {
-  company: Company
-}
-
-const Avaliations: React.FC<Props> = ({ company }) => {
+const Avaliations: React.FC<Props> = ({ avaliations }) => {
+  if (!avaliations.length) {
+    return (
+      <Grid sx={{ display: 'grid', placeItems: 'center' }}>
+        <Alert severity="error">This company hasn&apos;t been avaliated yet!</Alert>
+      </Grid>
+    )
+  }
   return (
-    <Grid container spacing={2}>
-      {new Array(10).fill(1).map((v, i) => (
-        <Grid item key={i + 'ok'} xs={12} md={6} lg={4}>
+    <Grid container spacing={2} sx={{ paddingBottom: 2 }}>
+      {avaliations.map(avaliation => (
+        <Grid item key={avaliation.id} xs={12} md={6} lg={4}>
           <Card>
-            <CardHeader
-              avatar={<Avatar aria-label="vacancy">R</Avatar>}
-              title="user.name"
-              subheader="avaliation.createdAt"
-            />
+            <CardHeader subheader={new Date(avaliation.createdAt).toLocaleDateString('US')} />
             <CardContent>
               <Typography variant="body1" color="text.primary">
-                This impressive paella is a perfect party dish and a fun meal to cook together with
-                your guests. Add 1 cup of frozen peas along with the mussels, if you like.
+                {avaliation.comment}
               </Typography>
-              <Typography variant="body2" component="div" sx={{ mt: 2 }}>Not recommended</Typography>
+              <Typography variant="body2" component="div" sx={{ mt: 2 }}>
+                {avaliation.recommendation}
+              </Typography>
             </CardContent>
             <CardActions>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} readOnly />
+              <Rating name="half-rating" defaultValue={avaliation.grade} readOnly />
             </CardActions>
           </Card>
         </Grid>

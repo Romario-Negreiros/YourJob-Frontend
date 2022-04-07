@@ -73,7 +73,7 @@ const VacancyPageInfo: React.FC<Props> = ({ vacancy, setVacancy, isCurrentCompan
         }
         throw new Error('Salary field is required!')
       }
-      throw new Error('No authorization to complete this action!')
+      throw new Error('You need to log in to complete this action!')
     } catch (err) {
       err instanceof Error ? setError(err.message) : setError('Failed to update vacancy!')
     } finally {

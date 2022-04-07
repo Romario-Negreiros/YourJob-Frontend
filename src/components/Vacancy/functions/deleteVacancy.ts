@@ -35,7 +35,7 @@ const deleteVacancy = async (
       }
       throw new Error(body.error)
     }
-    throw new Error('No authorization to complete this action!')
+    throw new Error('You need to log in to complete this action!')
   } catch (err) {
     if (err instanceof Error) {
       handleOpen(err.message, 'error')

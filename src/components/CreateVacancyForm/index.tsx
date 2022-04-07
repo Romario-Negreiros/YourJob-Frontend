@@ -60,7 +60,7 @@ const CreateVacancyForm: React.FC<Props> = ({ company, setCompany }) => {
         }
         throw new Error('Salary field is required!')
       }
-      throw new Error('No authorization to complete this action!')
+      throw new Error('You need to log in to complete this action!')
     } catch (err) {
       err instanceof Error ? setError(err.message) : setError('Unable to create vacancy!')
     } finally {

@@ -22,7 +22,7 @@ const Navigation: React.FC = () => {
         }
       }}
     >
-      <Button variant="outlined" color="secondary" onClick={() => navigate('/companies')}>
+      <Button variant="outlined" color="secondary" onClick={() => navigate('/companies/list')}>
         Companies
       </Button>
       <Button variant="outlined" color="secondary" onClick={() => navigate('/users')}>
