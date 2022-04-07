@@ -1,6 +1,16 @@
+export interface Avaliation {
+  id: Readonly<number>
+  companyId: Readonly<number>
+  recommendation: string
+  comment: string
+  grade: number
+  createdAt: Readonly<string>
+  updatedAt: Readonly<string>
+}
+
 export interface Vacancy {
   id: Readonly<number>
-  companyId: string
+  companyId: Readonly<number>
   description: string
   salary: number
   position: string
@@ -21,6 +31,7 @@ export interface Company {
   website: string
   companyLogo: string | null
   'company:vacancies': Vacancy[]
+  'company:avaliations': Avaliation[]
   passwordResetToken: string | null
   resetTokenExpiration: string | null
   verifyEmailToken: string | null
