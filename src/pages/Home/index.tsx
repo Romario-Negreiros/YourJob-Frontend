@@ -1,6 +1,9 @@
 import React from 'react'
 
 import useStyles from '../../styles/global'
+import { useAppSelector, useAppDispatch } from '../../app/hooks'
+import { setUser } from '../../app/slices/user'
+import { setCompany } from '../../app/slices/company'
 
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -12,8 +15,46 @@ import { Navigation } from '../../components'
 
 import WorkingGuy from '../../assets/animations/lottie-working-guy.json'
 
+import toastHandler from '../../context/Toast'
+
 const Home: React.FC = () => {
+  const { company: currentCompany, user: currentUser } = useAppSelector(state => state)
   const classes = useStyles()
+  const dispatch = useAppDispatch()
+  const { handleOpen } = React.useContext(toastHandler)
+
+  React.useEffect(() => {
+    const jwt = localStorage.getItem('jwt')
+    const type = localStorage.getItem('type')
+    if (jwt && type && !currentUser.data && !currentCompany.data) {
+      ;(async () => {
+        try {
+          const response = await fetch(
+            `https://yourjob-api.herokuapp.com/${type}/authenticate/jwt`,
+            {
+              method: 'POST',
+              headers: new Headers({
+                'Content-Type': 'application/json',
+                authorization: jwt
+              })
+            }
+          )
+          const body = await response.json()
+          if (response.ok) {
+            if (type === 'users') {
+              dispatch(setUser(body.user))
+            } else if (type === 'companies') {
+              dispatch(setCompany(body.company))
+            }
+            return
+          }
+          throw new Error(body.error)
+        } catch (err) {
+          err instanceof Error ? handleOpen(err.message, 'error') : handleOpen('Failed to auto log in!', 'error')
+        }
+      })()
+    }
+  }, [])
 
   return (
     <Grid container columns={{ xs: 1, md: 2 }} columnSpacing={2}>

@@ -63,6 +63,7 @@ const Login: React.FC = () => {
       const body = await response.json()
       if (response.ok) {
         localStorage.setItem('jwt', `Bearer ${body.token}`)
+        localStorage.setItem('type', loginMode)
         if (body.user) {
           dispatch(setUser(body.user))
           navigate(`/profile/${body.user.id}`)

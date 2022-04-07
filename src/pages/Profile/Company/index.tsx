@@ -66,7 +66,9 @@ const initialListItems: CompanyItem[] = [
   {
     text: 'Avaliations',
     icon: <ThumbsUpDownIcon color="primary" />,
-    renderComponent: (company: Company) => <Avaliations key="avaliations" company={company} />,
+    renderComponent: (company: Company) => (
+      <Avaliations key="avaliations" avaliations={company['company:avaliations']} />
+    ),
     active: false
   },
   {
@@ -89,8 +91,8 @@ const initialListItems: CompanyItem[] = [
   {
     text: 'Avaliate',
     icon: <AddIcon color="primary" />,
-    renderComponent: (company: Company) => (
-      <CreateAvaliationForm key="createAvaliationForm" company={company} />
+    renderComponent: (company: Company, setCompany: (company: Company | null) => void) => (
+      <CreateAvaliationForm key="createAvaliationForm" company={company} setCompany={setCompany} />
     ),
     active: false
   }
@@ -236,7 +238,7 @@ const CompanyProfile: React.FC = () => {
               if (company?.id === currentCompany?.id) {
                 return item.renderComponent(company as Company, setCompany, true)
               }
-              return item.renderComponent(company as Company)
+              return item.renderComponent(company as Company, setCompany)
             } else return null
           })}
         </Grid>
